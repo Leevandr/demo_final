@@ -1,0 +1,2 @@
+-- Start here: insert roles, users, categories, manufacturers, suppliers,
+-- units, statuses, pickup points, products, and sample orders.
