@@ -1,8 +1,14 @@
+from pathlib import Path
+
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QWidget, QMessageBox
 
 from src.db import dao
 from src.widgets.MainWindow import MainWindow
 from ui.gen.Auth import Ui_Auth
+
+ROOT_DIR = Path(__file__).resolve().parents[2]
+IMAGES_DIR = ROOT_DIR / "resources" / "images"
 
 
 class Auth(QWidget):
@@ -10,6 +16,8 @@ class Auth(QWidget):
         super().__init__()
         self.ui = Ui_Auth()
         self.ui.setupUi(self)
+        self.setWindowTitle("Вход")
+        self.setWindowIcon(QIcon(str(IMAGES_DIR / "app_icon.png")))
 
         self.main_window = None
         self.ui.pushButton_2.clicked.connect(self.login)
@@ -26,6 +34,7 @@ class Auth(QWidget):
         password = self.ui.lineEdit_password.text()
         if not login or not password:
             QMessageBox.warning(self,"Проверьте логин или пароль", "Введите логин и пароль")
+            return
 
         user = dao.login(login,password)
 

@@ -19,6 +19,55 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#ItemWidget {
+    background-color: #ffffff;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+}
+
+QWidget#ItemWidget[cardStatus=&quot;empty&quot;] {
+    background-color: #dff3ff;
+}
+
+QWidget#ItemWidget[cardStatus=&quot;discount&quot;] {
+    background-color: #2E8B57;
+}
+
+QWidget#ItemWidget[selected=&quot;true&quot;] {
+    background-color: #e8fff1;
+    border: 1px solid #00FA9A;
+}
+
+QLabel {
+    font-family: &quot;Times New Roman&quot;;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+}
+
+QLabel#label_title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+QLabel#label_discount {
+    color: #0b6b3a;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+QLabel#label_price {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+QLabel#label_image {
+    background-color: #f5f5f5;
+    border: 1px solid #dde3e8;
+    border-radius: 6px;
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">

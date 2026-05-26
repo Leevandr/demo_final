@@ -13,6 +13,23 @@ class Ui_ItemOrderWidget(object):
     def setupUi(self, ItemOrderWidget):
         ItemOrderWidget.setObjectName("ItemOrderWidget")
         ItemOrderWidget.resize(781, 416)
+        ItemOrderWidget.setStyleSheet("QWidget#ItemOrderWidget {\n"
+"    background-color: #ffffff;\n"
+"    border: 1px solid #cfd8dc;\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"QWidget#ItemOrderWidget[selected=\"true\"] {\n"
+"    background-color: #e8fff1;\n"
+"    border: 1px solid #00FA9A;\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"    font-family: \"Times New Roman\";\n"
+"    font-size: 14px;\n"
+"    border: none;\n"
+"    background: transparent;\n"
+"}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(ItemOrderWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()

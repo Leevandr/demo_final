@@ -75,6 +75,13 @@ CREATE TABLE `orders` (
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Дамп данных таблицы `orders`
+--
+
+INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES
+(1, 1, 1, 1, '2026-05-26', '2026-05-30', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -141,7 +148,9 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `article`, `title`, `category_id`, `description`, `manufacture_id`, `suppiler_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`) VALUES
 (1, '12333', 'Кроссовки', 1, 'кроссы', 1, 1, '1400.00', 1, 1, '0.00', 'nike.png'),
-(3, '123', 'sdf', 1, 'sdf', 1, 1, '12.00', 1, 3, '10.00', 'photo_2026-05-26_00-11-35.jpg');
+(3, '123', 'sdf', 1, 'sdf', 1, 1, '12.00', 1, 3, '10.00', 'photo_2026-05-26_00-11-35.jpg'),
+(4, '777', 'Ботинки', 2, 'Зимняя обувь', 2, 2, '3200.00', 1, 0, '5.00', 'img.png'),
+(5, '999', 'Кеды', 1, 'Повседневная обувь', 1, 3, '2500.00', 1, 8, '20.00', 'img.png');
 
 -- --------------------------------------------------------
 
@@ -320,7 +329,7 @@ ALTER TABLE `manufactures`
 -- AUTO_INCREMENT для таблицы `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `order_statuses`
@@ -338,7 +347,7 @@ ALTER TABLE `pickup_points`
 -- AUTO_INCREMENT для таблицы `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `roles`

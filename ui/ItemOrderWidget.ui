@@ -13,6 +13,25 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#ItemOrderWidget {
+    background-color: #ffffff;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+}
+
+QWidget#ItemOrderWidget[selected=&quot;true&quot;] {
+    background-color: #e8fff1;
+    border: 1px solid #00FA9A;
+}
+
+QLabel {
+    font-family: &quot;Times New Roman&quot;;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+}</string>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
