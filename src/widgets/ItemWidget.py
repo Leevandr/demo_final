@@ -1,5 +1,6 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import Qt
 
 from ui.gen.ItemWidget import Ui_ItemWidget
 from pathlib import Path
@@ -21,14 +22,14 @@ class ItemWidget(QWidget):
 
     def fill(self):
         item = self.item
-        self.ui.label_article.setText(item["article"])
-        self.ui.label_title.setText(item["title"])
-        self.ui.label_category.setText(item["category"])
-        self.ui.label_description.setText(item["description"])
-        self.ui.label_manufacrure.setText(item["manufacture"])
-        self.ui.label_suppiler.setText(item["suppiler"])
-        self.ui.label_quantity.setText(f'{item["quantity"]} {item["unit"]}')
-        self.ui.label_discount.setText(f'{item["discount"]} %')
+        self.ui.label_article.setText(f' Артикль: {item["article"]}')
+        self.ui.label_title.setText(f'Название: {item["title"]}')
+        self.ui.label_category.setText(f'Категория: {item["category"]}')
+        self.ui.label_description.setText(f'Описание: {item["description"]}')
+        self.ui.label_manufacrure.setText(f'Производитель: {item["manufacture"]}')
+        self.ui.label_suppiler.setText(f'Поставщик: {item["suppiler"]}')
+        self.ui.label_quantity.setText(f'Количество на складе: {item["quantity"]} {item["unit"]}')
+        self.ui.label_discount.setText(f'Скидка: {item["discount"]} %')
 
 
 
@@ -43,12 +44,14 @@ class ItemWidget(QWidget):
             )
         else:
             self.ui.label_price.setText(f'{item["price"]} Руб')
-        if item["image"]:
-            pixmap = QPixmap(image_path(item["image"])).scaled(150,150)
-            self.ui.label_image.setPixmap(pixmap)
-        else:
-            pixmap = QPixmap(path).scaled(150,150)
-            self.ui.label_image.setPixmap(pixmap)
+
+        image_name = item["image"] or "img.png"
+        pixmap = QPixmap(image_path(image_name))
+        if pixmap.isNull():
+            pixmap=QPixmap(image_path("img.png"))
+
+        pixmap = pixmap.scaled(150,150, Qt.AspectRatioMode.KeepAspectRatio)
+        self.ui.label_image.setPixmap(pixmap)
 
     def mousePressEvent(self, a0):
         main = self.window()

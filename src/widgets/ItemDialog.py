@@ -6,6 +6,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QDialog, QFileDialog
 
 from src.db import dao
+from src.widgets.ItemWidget import image_path
 from ui.gen.ItemDialog import Ui_ItemDialog
 
 
@@ -14,7 +15,7 @@ class ItemDialog(QDialog):
         super().__init__()
         self.ui = Ui_ItemDialog()
         self.ui.setupUi(self)
-
+        self.item = None
         self.fill()
         if item:
             self.item = item
@@ -40,7 +41,8 @@ class ItemDialog(QDialog):
         images_dir.mkdir(parents=True, exist_ok=True)
 
         dst = images_dir / src.name
-        shutil.copy(src, dst)
+        if src.resolve() != dst.resolve():
+            shutil.copy(src, dst)
 
         self.image_name = src.name
 
@@ -61,15 +63,14 @@ class ItemDialog(QDialog):
         self.ui.spinBox_quantity.setValue(int(item["quantity"]))
         self.ui.discountDoubleSpinBox.setValue(float(item["discount"]))
 
-        ROOT_DIR = Path(__file__).resolve().parents[2]
-        IMAGES_DIR = ROOT_DIR / "resources" / "images"
+        image_name = item["image"] or "img.png"
+        pixmap = QPixmap(image_path(image_name))
+        if pixmap.isNull():
+            pixmap = QPixmap(image_path("img.png"))
 
-        if item["image"]:
-            pixmap = QPixmap(str(IMAGES_DIR / item["image"])).scaled(150, 150)
-            self.ui.label.setPixmap(pixmap)
-        else:
-            pixmap = QPixmap(IMAGES_DIR / "img.png").scaled(150, 150)
-            self.ui.label.setPixmap(pixmap)
+        pixmap = pixmap.scaled(150,150, Qt.AspectRatioMode.KeepAspectRatio)
+        self.ui.label.setPixmap(pixmap)
+
 
     def fill(self):
         categories = dao.get_all_categories()

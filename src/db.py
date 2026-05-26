@@ -21,7 +21,7 @@ class Database:
             cur.execute("select * from users where password = %s and login = %s", (password, login))
         return cur.fetchone()
 
-    def get_all_products(self, search="", quantity="По умолчанию", manufacture="Все"):
+    def get_all_products(self, search="", quantity="По умолчанию", suppiler="Все"):
 
         sql = """
               select p.id,
@@ -40,21 +40,23 @@ class Database:
                        join categories c on c.id = p.category_id
                        join manufactures m on m.id = p.manufacture_id
                        join suppilers s on s.id = p.suppiler_id
-                       join units u on u.id = p.unit_id \
-
+                       join units u on u.id = p.unit_id
+                  where (m.title LIKE %s 
+                     or c.title LIKE %s 
+                     or s.title LIKE %s 
+                     or p.title LIKE %s)
               """
-        params = [f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%']
+        search_params = f'%{search}%'
+        params = [search_params, search_params, search_params, search_params]
 
-        sql += " where m.title LIKE %s or c.title LIKE %s or s.title LIKE %s or p.title LIKE %s "
-
-        if manufacture:
-            sql += f' and m.title = %s'
-            params.append(manufacture)
+        if suppiler != "Все":
+            sql += f' and s.title = %s'
+            params.append(suppiler)
 
         if quantity == "По возрастанию":
-            sql += " order p.quantity by asc"
+            sql += " order by p.quantity asc"
         if quantity == "По убыванию":
-            sql += " order p.quantity by desc"
+            sql += " order by p.quantity desc"
 
         with self.cursor() as cur:
             cur.execute(sql, params)
@@ -127,6 +129,11 @@ class Database:
                         "image_path = %s where id = %s",
                         (article, title, category_id, description, manufacture_id, suppiler_id, price, unit_id,
                          quantity, discount, image, product_id))
+            cur.connection.commit()
+
+    def delete_product(self, p_id):
+        with self.cursor() as cur:
+            cur.execute("delete from product where id = %s", (p_id,))
             cur.connection.commit()
 
 

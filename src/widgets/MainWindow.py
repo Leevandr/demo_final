@@ -26,10 +26,32 @@ class MainWindow(QWidget):
         self.conn()
 
         self.selected_widget = None
+        self.fill_comboboxes()
 
     def conn(self):
         self.ui.pushButton_add_product.clicked.connect(self.add_product)
         self.ui.pushButton_edit_product.clicked.connect(self.edit_product)
+        self.ui.pushButton_delete_product.clicked.connect(self.delete_product)
+
+        self.ui.lineEdit_search.textChanged.connect(self.add_widgets_items)
+        self.ui.comboBox_quantity.currentIndexChanged.connect(self.add_widgets_items)
+        self.ui.comboBox_suppilers.currentIndexChanged.connect(self.add_widgets_items)
+
+    def delete_product(self):
+        if self.selected_widget and isinstance(self.selected_widget, ItemWidget):
+            dao.delete_product(self.selected_widget.item["id"])
+        self.add_widgets_items()
+
+    def fill_comboboxes(self):
+        suppilers = dao.get_all_suppilers()
+        for suppiler in suppilers:
+            self.ui.comboBox_suppilers.addItem(suppiler["title"])
+
+        self.ui.comboBox_suppilers.addItem("Все")
+        self.ui.comboBox_suppilers.setCurrentText("Все")
+
+        self.ui.comboBox_quantity.addItem("По возрастанию")
+        self.ui.comboBox_quantity.addItem("По убыванию")
 
     def select_widget(self, widget: QWidget):
         if self.selected_widget:
@@ -52,10 +74,14 @@ class MainWindow(QWidget):
             self.selected_widget = None
 
         clear_layout(self.ui.verticalLayout_products)
-        items = dao.get_all_products()
+
+        search = self.ui.lineEdit_search.text()
+        quantity = self.ui.comboBox_quantity.currentText()
+        suppiler = self.ui.comboBox_suppilers.currentText()
+
+        items = dao.get_all_products(search, quantity, suppiler)
         for item in items:
             self.ui.verticalLayout_products.addWidget(ItemWidget(item))
-
 
     def access_setting(self):
         if self.user:
@@ -78,7 +104,7 @@ class MainWindow(QWidget):
             self.ui.tabWidget.setTabVisible(1, False)
 
             self.ui.lineEdit_search.setVisible(False)
-            self.ui.comboBox_count.setVisible(False)
+            self.ui.comboBox_quantity.setVisible(False)
             self.ui.comboBox_suppilers.setVisible(False)
 
     def fill_fio(self):
