@@ -17,7 +17,8 @@ class ItemDialog(QDialog):
 
         self.fill()
         if item:
-            pass
+            self.item = item
+            self.fill_exist()
 
         self.ui.pushButton_save.clicked.connect(self.save)
         self.image_name = None
@@ -43,8 +44,32 @@ class ItemDialog(QDialog):
 
         self.image_name = src.name
 
-        pixmap = QPixmap(str(dst)).scaled(300,200,Qt.AspectRatioMode.KeepAspectRatio)
+        pixmap = QPixmap(str(dst)).scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio)
         self.ui.label.setPixmap(pixmap)
+
+    def fill_exist(self):
+        item = self.item
+        self.ui.categoryComboBox.setCurrentText(item["category"])
+        self.ui.manufactureComboBox.setCurrentText(item["manufacture"])
+        self.ui.suppilerComboBox.setCurrentText(item["suppiler"])
+        self.ui.unitComboBox.setCurrentText(item["unit"])
+
+        self.ui.spinBox.setValue(int(item["article"]))
+        self.ui.titleLineEdit.setText(item["title"])
+        self.ui.descriptionLineEdit.setText(item["description"])
+        self.ui.priceSpinBox.setValue(int(item["price"]))
+        self.ui.spinBox_quantity.setValue(int(item["quantity"]))
+        self.ui.discountDoubleSpinBox.setValue(float(item["discount"]))
+
+        ROOT_DIR = Path(__file__).resolve().parents[2]
+        IMAGES_DIR = ROOT_DIR / "resources" / "images"
+
+        if item["image"]:
+            pixmap = QPixmap(str(IMAGES_DIR / item["image"])).scaled(150, 150)
+            self.ui.label.setPixmap(pixmap)
+        else:
+            pixmap = QPixmap(IMAGES_DIR / "img.png").scaled(150, 150)
+            self.ui.label.setPixmap(pixmap)
 
     def fill(self):
         categories = dao.get_all_categories()
@@ -62,7 +87,7 @@ class ItemDialog(QDialog):
 
     def save(self):
 
-        article = self.ui.articleLineEdit.text()
+        article = self.ui.spinBox.value()
         title = self.ui.titleLineEdit.text()
         description = self.ui.descriptionLineEdit.text()
 
@@ -75,26 +100,39 @@ class ItemDialog(QDialog):
         suppiler = self.ui.suppilerComboBox.currentText()
         suppiler_id = dao.get_suppiler_id(suppiler)["id"]
 
-
         unit = self.ui.unitComboBox.currentText()
         unit_id = dao.get_unit_id(unit)["id"]
 
-        quantity = self.ui.quantityLineEdit.text()
-        discount = str(self.ui.discountDoubleSpinBox.value())
+        discount = self.ui.discountDoubleSpinBox.value()
+        quantity = self.ui.spinBox_quantity.value()
         image = self.image_name
+        price = str(self.ui.priceSpinBox.text())
 
-        price = str(self.ui.priceSpinBox.text()) # добавить
+        if self.item:
+            product_id = self.item["id"]
+            dao.edit_product(product_id,
+                             str(article),
+                             str(title),
+                             str(category_id),
+                             str(description),
+                             str(manufacture_id),
+                             str(suppiler_id),
+                             str(price),
+                             str(unit_id),
+                             str(quantity),
+                             str(discount),
+                             str(image))
+        else:
+            dao.add_new_product(str(article),
+                                str(title),
+                                str(category_id),
+                                str(description),
+                                str(manufacture_id),
+                                str(suppiler_id),
+                                str(price),
+                                str(unit_id),
+                                str(quantity),
+                                str(discount),
+                                str(image))
 
-        dao.add_new_product(str(article),
-                            str(title),
-                            str(category_id),
-                            str(description),
-                            str(manufacture_id),
-                            str(suppiler_id),
-                            str(price),
-                            str(unit_id),
-                            str(quantity),
-                            str(discount),
-                            str(image))
         self.accept()
-

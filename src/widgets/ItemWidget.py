@@ -31,11 +31,25 @@ class ItemWidget(QWidget):
         self.ui.label_discount.setText(f'{item["discount"]} %')
 
 
-        self.ui.label_price.setText(str(item["price"]))
 
+        if item["discount"] >= 15:
+            old_price = item["price"]
+            discount = item["discount"]
+            new_price = old_price * (1 - discount / 100)
+
+            self.ui.label_price.setText(
+                f'<span style="color:red;"> Старая цена: <s>{old_price}</s> Руб</span><br>'
+                f'<span style="color:black;">Новая цена: {round(new_price, 2)} Руб</span>'
+            )
+        else:
+            self.ui.label_price.setText(f'{item["price"]} Руб')
         if item["image"]:
             pixmap = QPixmap(image_path(item["image"])).scaled(150,150)
             self.ui.label_image.setPixmap(pixmap)
         else:
             pixmap = QPixmap(path).scaled(150,150)
             self.ui.label_image.setPixmap(pixmap)
+
+    def mousePressEvent(self, a0):
+        main = self.window()
+        main.select_widget(self)

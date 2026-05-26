@@ -166,24 +166,24 @@
            </property>
           </widget>
          </item>
-         <item alignment="Qt::AlignmentFlag::AlignTop">
+         <item alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
           <widget class="QLabel" name="label_price">
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>100</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>400</width>
              <height>200</height>
             </size>
            </property>
            <property name="font">
             <font>
              <family>Palatino Linotype</family>
-             <pointsize>14</pointsize>
+             <pointsize>10</pointsize>
              <bold>false</bold>
             </font>
            </property>

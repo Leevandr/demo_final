@@ -25,19 +25,35 @@ class MainWindow(QWidget):
         self.add_widgets_items()
         self.conn()
 
+        self.selected_widget = None
+
     def conn(self):
         self.ui.pushButton_add_product.clicked.connect(self.add_product)
+        self.ui.pushButton_edit_product.clicked.connect(self.edit_product)
+
+    def select_widget(self, widget: QWidget):
+        if self.selected_widget:
+            self.selected_widget.setStyleSheet("")
+
+        self.selected_widget = widget
+        self.selected_widget.setStyleSheet("background-color: rgb(198, 255, 181);")
+
+    def edit_product(self):
+        if self.selected_widget and isinstance(self.selected_widget, ItemWidget):
+            ItemDialog(self.selected_widget.item).exec()
+            self.add_widgets_items()
 
     def add_product(self):
         ItemDialog().exec()
         self.add_widgets_items()
 
     def add_widgets_items(self):
+        if self.select_widget:
+            self.selected_widget = None
+
         clear_layout(self.ui.verticalLayout_products)
         items = dao.get_all_products()
-        print(items)
         for item in items:
-            print(item)
             self.ui.verticalLayout_products.addWidget(ItemWidget(item))
 
 

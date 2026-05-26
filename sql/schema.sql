@@ -1,2 +1,0 @@
--- Start here: create the normalized database schema from README.md.
--- Keep table and column names consistent, add primary keys and foreign keys.
