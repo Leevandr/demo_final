@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QDate
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog, QMessageBox
 
 from src.db import dao
 from ui.gen.OrderDialog import Ui_OrderDialog
@@ -10,8 +10,6 @@ class OrderDialog(QDialog):
         super().__init__()
         self.ui = Ui_OrderDialog()
         self.ui.setupUi(self)
-        self.setWindowTitle("Заказ")
-        self.translate_labels()
 
         self.item = item
         self.user = user
@@ -21,13 +19,6 @@ class OrderDialog(QDialog):
             self.fill_exist()
 
         self.ui.pushButton_save.clicked.connect(self.save)
-
-    def translate_labels(self):
-        self.ui.productLabel.setText("Артикул")
-        self.ui.statusLabel.setText("Статус")
-        self.ui.pickupLabel.setText("Пункт выдачи")
-        self.ui.orderLabel.setText("Дата заказа")
-        self.ui.deliveryLabel.setText("Дата выдачи")
 
     def fill(self):
         products = dao.get_all_products()
@@ -75,9 +66,13 @@ class OrderDialog(QDialog):
 
         if self.item:
             user_id = self.item["user_id"]
-            dao.edit_order(self.item["id"], product_id, status_id, pickup_id, order_date, delivery_date, user_id)
+            saved = dao.edit_order(self.item["id"], product_id, status_id, pickup_id, order_date, delivery_date, user_id)
         else:
             user_id = self.user["id"] if self.user else 1
-            dao.add_order(product_id, status_id, pickup_id, order_date, delivery_date, user_id)
+            saved = dao.add_order(product_id, status_id, pickup_id, order_date, delivery_date, user_id)
+
+        if not saved:
+            QMessageBox.warning(self, "Ошибка", "Нет остатка на складе или заказ не сохранён")
+            return
 
         self.accept()

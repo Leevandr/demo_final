@@ -62,20 +62,10 @@ class Ui_OrderDialog(object):
 
     def retranslateUi(self, OrderDialog):
         _translate = QtCore.QCoreApplication.translate
-        OrderDialog.setWindowTitle(_translate("OrderDialog", "Dialog"))
-        self.productLabel.setText(_translate("OrderDialog", "product"))
-        self.statusLabel.setText(_translate("OrderDialog", "status"))
-        self.pickupLabel.setText(_translate("OrderDialog", "pickup"))
-        self.orderLabel.setText(_translate("OrderDialog", "order"))
-        self.deliveryLabel.setText(_translate("OrderDialog", "delivery"))
+        OrderDialog.setWindowTitle(_translate("OrderDialog", "Заказ"))
+        self.productLabel.setText(_translate("OrderDialog", "Артикул"))
+        self.statusLabel.setText(_translate("OrderDialog", "Статус"))
+        self.pickupLabel.setText(_translate("OrderDialog", "Пункт выдачи"))
+        self.orderLabel.setText(_translate("OrderDialog", "Дата заказа"))
+        self.deliveryLabel.setText(_translate("OrderDialog", "Дата доставки"))
         self.pushButton_save.setText(_translate("OrderDialog", "Сохранить"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    OrderDialog = QtWidgets.QDialog()
-    ui = Ui_OrderDialog()
-    ui.setupUi(OrderDialog)
-    OrderDialog.show()
-    sys.exit(app.exec())

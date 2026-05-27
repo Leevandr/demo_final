@@ -13,11 +13,12 @@ class Ui_ItemWidget(object):
     def setupUi(self, ItemWidget):
         ItemWidget.setObjectName("ItemWidget")
         ItemWidget.resize(600, 256)
+        ItemWidget.setMinimumSize(QtCore.QSize(0, 190))
         ItemWidget.setMaximumSize(QtCore.QSize(16777215, 55555))
         ItemWidget.setStyleSheet("QWidget#ItemWidget {\n"
 "    background-color: #ffffff;\n"
-"    border: 1px solid #cfd8dc;\n"
-"    border-radius: 8px;\n"
+"    border: 2px solid #263238;\n"
+"    border-radius: 0px;\n"
 "}\n"
 "\n"
 "QWidget#ItemWidget[cardStatus=\"empty\"] {\n"
@@ -29,8 +30,7 @@ class Ui_ItemWidget(object):
 "}\n"
 "\n"
 "QWidget#ItemWidget[selected=\"true\"] {\n"
-"    background-color: #e8fff1;\n"
-"    border: 1px solid #00FA9A;\n"
+"    border: 4px solid #1f6feb;\n"
 "}\n"
 "\n"
 "QLabel {\n"
@@ -57,17 +57,28 @@ class Ui_ItemWidget(object):
 "}\n"
 "\n"
 "QLabel#label_image {\n"
-"    background-color: #f5f5f5;\n"
-"    border: 1px solid #dde3e8;\n"
-"    border-radius: 6px;\n"
+"    background-color: transparent;\n"
+"    border: 1px solid #263238;\n"
+"    border-radius: 0px;\n"
+"}\n"
+"\n"
+"QWidget#ItemWidget[selected=\"true\"] QLabel {\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QWidget#ItemWidget[selected=\"true\"] QLabel#label_image {\n"
+"    border: 1px solid #263238;\n"
 "}")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(ItemWidget)
+        self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setSpacing(12)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.label_image = QtWidgets.QLabel(parent=ItemWidget)
+        self.label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_image.setMinimumSize(QtCore.QSize(150, 150))
         self.label_image.setMaximumSize(QtCore.QSize(150, 150))
         self.label_image.setObjectName("label_image")
@@ -80,6 +91,7 @@ class Ui_ItemWidget(object):
         self.verticalLayout_3.addWidget(self.label_article)
         self.label_title = QtWidgets.QLabel(parent=ItemWidget)
         self.label_title.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_title.setWordWrap(True)
         self.label_title.setObjectName("label_title")
         self.verticalLayout_3.addWidget(self.label_title)
         self.label_category = QtWidgets.QLabel(parent=ItemWidget)
@@ -88,6 +100,7 @@ class Ui_ItemWidget(object):
         self.verticalLayout_3.addWidget(self.label_category)
         self.label_description = QtWidgets.QLabel(parent=ItemWidget)
         self.label_description.setMinimumSize(QtCore.QSize(200, 30))
+        self.label_description.setWordWrap(True)
         self.label_description.setObjectName("label_description")
         self.verticalLayout_3.addWidget(self.label_description)
         self.label_manufacrure = QtWidgets.QLabel(parent=ItemWidget)
@@ -99,7 +112,7 @@ class Ui_ItemWidget(object):
         self.label_suppiler.setObjectName("label_suppiler")
         self.verticalLayout_3.addWidget(self.label_suppiler)
         self.label_quantity = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_quantity.setMaximumSize(QtCore.QSize(100, 30))
+        self.label_quantity.setMaximumSize(QtCore.QSize(16777215, 30))
         self.label_quantity.setObjectName("label_quantity")
         self.verticalLayout_3.addWidget(self.label_quantity)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
@@ -123,6 +136,7 @@ class Ui_ItemWidget(object):
         font.setPointSize(10)
         font.setBold(False)
         self.label_price.setFont(font)
+        self.label_price.setWordWrap(True)
         self.label_price.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.label_price.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_price.setObjectName("label_price")
@@ -147,13 +161,3 @@ class Ui_ItemWidget(object):
         self.label_quantity.setText(_translate("ItemWidget", "TextLabel"))
         self.label_discount.setText(_translate("ItemWidget", "5 %"))
         self.label_price.setText(_translate("ItemWidget", "12300"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    ItemWidget = QtWidgets.QWidget()
-    ui = Ui_ItemWidget()
-    ui.setupUi(ItemWidget)
-    ItemWidget.show()
-    sys.exit(app.exec())

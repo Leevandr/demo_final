@@ -15,8 +15,6 @@ class ItemDialog(QDialog):
         super().__init__()
         self.ui = Ui_ItemDialog()
         self.ui.setupUi(self)
-        self.setWindowTitle("Товар")
-        self.translate_labels()
         self.item = item
         self.image_name = "img.png"
         self.fill()
@@ -27,20 +25,6 @@ class ItemDialog(QDialog):
 
         self.ui.pushButton_save.clicked.connect(self.save)
         self.ui.pushButton_image.clicked.connect(self.choose_image)
-
-    def translate_labels(self):
-        self.ui.articleLabel.setText("Артикул")
-        self.ui.titleLabel.setText("Название")
-        self.ui.categoryLabel.setText("Категория")
-        self.ui.descriptionLabel.setText("Описание")
-        self.ui.manufactureLabel.setText("Производитель")
-        self.ui.suppilerLabel.setText("Поставщик")
-        self.ui.priceLabel.setText("Цена")
-        self.ui.unitLabel.setText("Единица")
-        self.ui.quantityLabel.setText("Количество")
-        self.ui.discountLabel.setText("Скидка")
-        self.ui.imageLabel.setText("Изображение")
-        self.ui.label.setText("Изображение не выбрано")
 
     def choose_image(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -58,18 +42,18 @@ class ItemDialog(QDialog):
         images_dir.mkdir(parents=True, exist_ok=True)
 
         dst = images_dir / src.name
-        if src.resolve() != dst.resolve():
-            pixmap = QPixmap(str(src))
-            if pixmap.isNull():
+        pixmap = QPixmap(str(src))
+        if pixmap.isNull():
+            if src.resolve() != dst.resolve():
                 shutil.copy(src, dst)
-            else:
-                pixmap = pixmap.scaled(
-                    300,
-                    200,
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation
-                )
-                pixmap.save(str(dst))
+        else:
+            pixmap = pixmap.scaled(
+                300,
+                200,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            pixmap.save(str(dst))
 
         self.image_name = src.name
 
@@ -115,7 +99,7 @@ class ItemDialog(QDialog):
         if pixmap.isNull():
             pixmap = QPixmap(image_path("img.png"))
 
-        pixmap = pixmap.scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)
+        pixmap = pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio)
         self.ui.label.setPixmap(pixmap)
 
 

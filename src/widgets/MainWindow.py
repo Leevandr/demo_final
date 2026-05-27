@@ -28,7 +28,6 @@ class MainWindow(QWidget):
         super().__init__()
         self.ui = Ui_MainWidget()
         self.ui.setupUi(self)
-        self.setWindowTitle("Магазин обуви")
 
         self.user = user
         self.selected_widget = None
@@ -59,7 +58,6 @@ class MainWindow(QWidget):
         icon_path = IMAGES_DIR / "app_icon.png"
 
         self.setWindowIcon(QIcon(str(icon_path)))
-        self.ui.label_logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         pixmap = QPixmap(str(logo_path))
         if not pixmap.isNull():
@@ -148,11 +146,13 @@ class MainWindow(QWidget):
     def add_order(self):
         if OrderDialog(user=self.user).exec() == QDialog.DialogCode.Accepted:
             self.add_widgets_orders()
+            self.add_widgets_items()
 
     def edit_order(self):
         if self.selected_widget and isinstance(self.selected_widget, ItemOrderWidget):
             if OrderDialog(self.selected_widget.item, self.user).exec() == QDialog.DialogCode.Accepted:
                 self.add_widgets_orders()
+                self.add_widgets_items()
         else:
             QMessageBox.warning(self, "Ошибка", "Выберите заказ")
 
@@ -165,8 +165,11 @@ class MainWindow(QWidget):
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
             )
             if result == QMessageBox.StandardButton.Yes:
-                dao.delete_order(self.selected_widget.item["id"])
+                deleted = dao.delete_order(self.selected_widget.item["id"])
+                if not deleted:
+                    QMessageBox.warning(self, "Ошибка", "Заказ не удалён")
                 self.add_widgets_orders()
+                self.add_widgets_items()
         else:
             QMessageBox.warning(self, "Ошибка", "Выберите заказ")
 

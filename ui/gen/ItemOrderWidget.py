@@ -12,16 +12,22 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ItemOrderWidget(object):
     def setupUi(self, ItemOrderWidget):
         ItemOrderWidget.setObjectName("ItemOrderWidget")
-        ItemOrderWidget.resize(781, 416)
+        ItemOrderWidget.resize(781, 132)
+        ItemOrderWidget.setMinimumSize(QtCore.QSize(0, 96))
         ItemOrderWidget.setStyleSheet("QWidget#ItemOrderWidget {\n"
 "    background-color: #ffffff;\n"
-"    border: 1px solid #cfd8dc;\n"
-"    border-radius: 8px;\n"
+"    border: 2px solid #263238;\n"
+"    border-radius: 0px;\n"
 "}\n"
 "\n"
 "QWidget#ItemOrderWidget[selected=\"true\"] {\n"
-"    background-color: #e8fff1;\n"
-"    border: 1px solid #00FA9A;\n"
+"    border: 4px solid #1f6feb;\n"
+"}\n"
+"\n"
+"QFrame#frame_info,\n"
+"QFrame#frame_delivery {\n"
+"    background-color: transparent;\n"
+"    border: 1px solid #263238;\n"
 "}\n"
 "\n"
 "QLabel {\n"
@@ -29,49 +35,61 @@ class Ui_ItemOrderWidget(object):
 "    font-size: 14px;\n"
 "    border: none;\n"
 "    background: transparent;\n"
+"}\n"
+"\n"
+"QLabel#label_product_name {\n"
+"    font-weight: bold;\n"
 "}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(ItemOrderWidget)
+        self.horizontalLayout.setContentsMargins(12, 8, 12, 8)
+        self.horizontalLayout.setSpacing(14)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label_status_name = QtWidgets.QLabel(parent=ItemOrderWidget)
-        self.label_status_name.setObjectName("label_status_name")
-        self.horizontalLayout_2.addWidget(self.label_status_name)
-        self.label_product_name = QtWidgets.QLabel(parent=ItemOrderWidget)
+        self.frame_info = QtWidgets.QFrame(parent=ItemOrderWidget)
+        self.frame_info.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_info.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_info.setObjectName("frame_info")
+        self.verticalLayout_info = QtWidgets.QVBoxLayout(self.frame_info)
+        self.verticalLayout_info.setContentsMargins(10, 8, 10, 8)
+        self.verticalLayout_info.setSpacing(4)
+        self.verticalLayout_info.setObjectName("verticalLayout_info")
+        self.label_product_name = QtWidgets.QLabel(parent=self.frame_info)
         self.label_product_name.setObjectName("label_product_name")
-        self.horizontalLayout_2.addWidget(self.label_product_name)
-        self.label_pickup_point = QtWidgets.QLabel(parent=ItemOrderWidget)
+        self.verticalLayout_info.addWidget(self.label_product_name)
+        self.label_status_name = QtWidgets.QLabel(parent=self.frame_info)
+        self.label_status_name.setObjectName("label_status_name")
+        self.verticalLayout_info.addWidget(self.label_status_name)
+        self.label_pickup_point = QtWidgets.QLabel(parent=self.frame_info)
+        self.label_pickup_point.setWordWrap(True)
         self.label_pickup_point.setObjectName("label_pickup_point")
-        self.horizontalLayout_2.addWidget(self.label_pickup_point)
-        self.label_order_date = QtWidgets.QLabel(parent=ItemOrderWidget)
+        self.verticalLayout_info.addWidget(self.label_pickup_point)
+        self.label_order_date = QtWidgets.QLabel(parent=self.frame_info)
         self.label_order_date.setObjectName("label_order_date")
-        self.horizontalLayout_2.addWidget(self.label_order_date)
-        self.label_delivery_date = QtWidgets.QLabel(parent=ItemOrderWidget)
+        self.verticalLayout_info.addWidget(self.label_order_date)
+        self.horizontalLayout.addWidget(self.frame_info)
+        self.frame_delivery = QtWidgets.QFrame(parent=ItemOrderWidget)
+        self.frame_delivery.setMinimumSize(QtCore.QSize(130, 0))
+        self.frame_delivery.setMaximumSize(QtCore.QSize(160, 16777215))
+        self.frame_delivery.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_delivery.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_delivery.setObjectName("frame_delivery")
+        self.verticalLayout_delivery = QtWidgets.QVBoxLayout(self.frame_delivery)
+        self.verticalLayout_delivery.setContentsMargins(8, 8, 8, 8)
+        self.verticalLayout_delivery.setObjectName("verticalLayout_delivery")
+        self.label_delivery_date = QtWidgets.QLabel(parent=self.frame_delivery)
+        self.label_delivery_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_delivery_date.setWordWrap(True)
         self.label_delivery_date.setObjectName("label_delivery_date")
-        self.horizontalLayout_2.addWidget(self.label_delivery_date)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.verticalLayout_delivery.addWidget(self.label_delivery_date)
+        self.horizontalLayout.addWidget(self.frame_delivery)
 
         self.retranslateUi(ItemOrderWidget)
         QtCore.QMetaObject.connectSlotsByName(ItemOrderWidget)
 
     def retranslateUi(self, ItemOrderWidget):
         _translate = QtCore.QCoreApplication.translate
-        ItemOrderWidget.setWindowTitle(_translate("ItemOrderWidget", "Form"))
-        self.label_status_name.setText(_translate("ItemOrderWidget", "TextLabel"))
-        self.label_product_name.setText(_translate("ItemOrderWidget", "TextLabel"))
-        self.label_pickup_point.setText(_translate("ItemOrderWidget", "TextLabel"))
-        self.label_order_date.setText(_translate("ItemOrderWidget", "TextLabel"))
-        self.label_delivery_date.setText(_translate("ItemOrderWidget", "TextLabel"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    ItemOrderWidget = QtWidgets.QWidget()
-    ui = Ui_ItemOrderWidget()
-    ui.setupUi(ItemOrderWidget)
-    ItemOrderWidget.show()
-    sys.exit(app.exec())
+        ItemOrderWidget.setWindowTitle(_translate("ItemOrderWidget", "Заказ"))
+        self.label_product_name.setText(_translate("ItemOrderWidget", "Артикул заказа"))
+        self.label_status_name.setText(_translate("ItemOrderWidget", "Статус заказа"))
+        self.label_pickup_point.setText(_translate("ItemOrderWidget", "Адрес пункта выдачи"))
+        self.label_order_date.setText(_translate("ItemOrderWidget", "Дата заказа"))
+        self.label_delivery_date.setText(_translate("ItemOrderWidget", "Дата доставки"))

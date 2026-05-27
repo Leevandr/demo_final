@@ -186,27 +186,85 @@ class Database:
         return cur.fetchall()
 
     def add_order(self, product_id, status_id, pickup_point_id, order_date, delivery_date, user_id):
-        with self.cursor() as cur:
-            cur.execute(
-                "insert into orders(product_id,status_id,pickup_point_id,order_date,delivery_date,user_id) "
-                "values (%s,%s,%s,%s,%s,%s)",
-                (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id)
-            )
-            cur.connection.commit()
+        try:
+            with self.cursor() as cur:
+                # сначала двигаем остаток потом пишем заказ чтобы база не разъехалась
+                cur.execute(
+                    "update products set quantity = quantity - 1 where id = %s and quantity > 0",
+                    (product_id,)
+                )
+                if cur.rowcount == 0:
+                    self.conn.rollback()
+                    return False
+
+                cur.execute(
+                    "insert into orders(product_id,status_id,pickup_point_id,order_date,delivery_date,user_id) "
+                    "values (%s,%s,%s,%s,%s,%s)",
+                    (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id)
+                )
+                cur.connection.commit()
+            return True
+        except pymysql.MySQLError:
+            self.conn.rollback()
+            return False
 
     def edit_order(self, order_id, product_id, status_id, pickup_point_id, order_date, delivery_date, user_id):
-        with self.cursor() as cur:
-            cur.execute(
-                "update orders set product_id = %s, status_id = %s, pickup_point_id = %s, "
-                "order_date = %s, delivery_date = %s, user_id = %s where id = %s",
-                (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id, order_id)
-            )
-            cur.connection.commit()
+        try:
+            with self.cursor() as cur:
+                cur.execute("select product_id from orders where id = %s", (order_id,))
+                old_order = cur.fetchone()
+                if not old_order:
+                    self.conn.rollback()
+                    return False
+
+                old_product_id = old_order["product_id"]
+                if old_product_id != product_id:
+                    cur.execute(
+                        "update products set quantity = quantity + 1 where id = %s",
+                        (old_product_id,)
+                    )
+                    cur.execute(
+                        "update products set quantity = quantity - 1 where id = %s and quantity > 0",
+                        (product_id,)
+                    )
+                    if cur.rowcount == 0:
+                        self.conn.rollback()
+                        return False
+
+                cur.execute(
+                    "update orders set product_id = %s, status_id = %s, pickup_point_id = %s, "
+                    "order_date = %s, delivery_date = %s, user_id = %s where id = %s",
+                    (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id, order_id)
+                )
+                cur.connection.commit()
+            return True
+        except pymysql.MySQLError:
+            self.conn.rollback()
+            return False
 
     def delete_order(self, order_id):
-        with self.cursor() as cur:
-            cur.execute("delete from orders where id = %s", (order_id,))
-            cur.connection.commit()
+        try:
+            with self.cursor() as cur:
+                cur.execute("select product_id from orders where id = %s", (order_id,))
+                order = cur.fetchone()
+                if not order:
+                    self.conn.rollback()
+                    return False
+
+                cur.execute("delete from orders where id = %s", (order_id,))
+                if cur.rowcount == 0:
+                    self.conn.rollback()
+                    return False
+
+                cur.execute(
+                    "update products set quantity = quantity + 1 where id = %s",
+                    (order["product_id"],)
+                )
+                cur.connection.commit()
+            return True
+        except pymysql.MySQLError:
+            self.conn.rollback()
+            return False
 
 
 dao = Database()

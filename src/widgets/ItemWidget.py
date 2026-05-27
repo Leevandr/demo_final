@@ -16,22 +16,11 @@ class ItemWidget(QWidget):
         super().__init__()
         self.ui = Ui_ItemWidget()
         self.ui.setupUi(self)
+        self.default_style = self.styleSheet()
 
         self.item = item
         self.is_selected = False
-        self.prepare_ui()
         self.fill()
-
-    def prepare_ui(self):
-        self.setMinimumHeight(190)
-        self.ui.label_image.setFixedSize(150, 150)
-        self.ui.label_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.ui.label_quantity.setMaximumWidth(10000)
-        self.ui.label_description.setWordWrap(True)
-        self.ui.label_title.setWordWrap(True)
-        self.ui.label_price.setWordWrap(True)
-        self.ui.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
-        self.ui.horizontalLayout.setSpacing(12)
 
     def card_status(self):
         if int(self.item["quantity"]) <= 0:
@@ -41,11 +30,20 @@ class ItemWidget(QWidget):
         return "normal"
 
     def apply_style(self):
-        self.setProperty("cardStatus", self.card_status())
-        self.setProperty("selected", self.is_selected)
-        self.style().unpolish(self)
-        self.style().polish(self)
-        self.update()
+        background = "#ffffff"
+        if self.card_status() == "empty":
+            background = "#dff3ff"
+        elif self.card_status() == "discount":
+            background = "#2E8B57"
+
+        border = "4px solid #1f6feb" if self.is_selected else "2px solid #263238"
+        self.setStyleSheet(self.default_style + f"""
+QWidget#ItemWidget {{
+    background-color: {background};
+    border: {border};
+    border-radius: 0px;
+}}
+""")
 
     def set_selected(self, value: bool):
         self.is_selected = value

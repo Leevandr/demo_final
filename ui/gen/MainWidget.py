@@ -18,6 +18,7 @@ class Ui_MainWidget(object):
         self.horizontalLayout_top = QtWidgets.QHBoxLayout()
         self.horizontalLayout_top.setObjectName("horizontalLayout_top")
         self.label_logo = QtWidgets.QLabel(parent=MainWidget)
+        self.label_logo.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_logo.setMinimumSize(QtCore.QSize(120, 44))
         self.label_logo.setMaximumSize(QtCore.QSize(180, 54))
         self.label_logo.setText("")
@@ -128,7 +129,7 @@ class Ui_MainWidget(object):
 
     def retranslateUi(self, MainWidget):
         _translate = QtCore.QCoreApplication.translate
-        MainWidget.setWindowTitle(_translate("MainWidget", "Form"))
+        MainWidget.setWindowTitle(_translate("MainWidget", "Магазин обуви"))
         self.pushButton_logout.setText(_translate("MainWidget", "Выйти"))
         self.pushButton_add_product.setText(_translate("MainWidget", "Добавить"))
         self.pushButton_delete_product.setText(_translate("MainWidget", "Удалить"))

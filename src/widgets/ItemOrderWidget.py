@@ -8,16 +8,21 @@ class ItemOrderWidget(QWidget):
         super().__init__()
         self.ui = Ui_ItemOrderWidget()
         self.ui.setupUi(self)
+        self.default_style = self.styleSheet()
 
         self.item = item
         self.is_selected = False
         self.fill()
 
     def apply_style(self):
-        self.setProperty("selected", self.is_selected)
-        self.style().unpolish(self)
-        self.style().polish(self)
-        self.update()
+        border = "4px solid #1f6feb" if self.is_selected else "2px solid #263238"
+        self.setStyleSheet(self.default_style + f"""
+QWidget#ItemOrderWidget {{
+    background-color: #ffffff;
+    border: {border};
+    border-radius: 0px;
+}}
+""")
 
     def set_selected(self, value: bool):
         self.is_selected = value
@@ -29,7 +34,7 @@ class ItemOrderWidget(QWidget):
         self.ui.label_product_name.setText(f'Артикул: {self.item["article"]}')
         self.ui.label_pickup_point.setText(f'Пункт выдачи: {self.item["pickup"]}')
         self.ui.label_order_date.setText(f'Дата заказа: {self.item["order_date"]}')
-        self.ui.label_delivery_date.setText(f'Дата выдачи: {self.item["delivery_date"]}')
+        self.ui.label_delivery_date.setText(f'Дата доставки: {self.item["delivery_date"]}')
 
     def mousePressEvent(self, a0):
         main = self.window()

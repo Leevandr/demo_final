@@ -16,7 +16,6 @@ class Auth(QWidget):
         super().__init__()
         self.ui = Ui_Auth()
         self.ui.setupUi(self)
-        self.setWindowTitle("Вход")
         self.setWindowIcon(QIcon(str(IMAGES_DIR / "app_icon.png")))
 
         self.main_window = None

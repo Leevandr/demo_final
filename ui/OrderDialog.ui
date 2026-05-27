@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Заказ</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -21,7 +21,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="productLabel">
          <property name="text">
-          <string>product</string>
+          <string>Артикул</string>
          </property>
         </widget>
        </item>
@@ -31,7 +31,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="statusLabel">
          <property name="text">
-          <string>status</string>
+          <string>Статус</string>
          </property>
         </widget>
        </item>
@@ -41,7 +41,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="pickupLabel">
          <property name="text">
-          <string>pickup</string>
+          <string>Пункт выдачи</string>
          </property>
         </widget>
        </item>
@@ -51,7 +51,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="orderLabel">
          <property name="text">
-          <string>order</string>
+          <string>Дата заказа</string>
          </property>
         </widget>
        </item>
@@ -61,7 +61,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="deliveryLabel">
          <property name="text">
-          <string>delivery</string>
+          <string>Дата доставки</string>
          </property>
         </widget>
        </item>
