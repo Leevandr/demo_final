@@ -1,11 +1,10 @@
-import sys
-
 from PyQt6.QtWidgets import QApplication
-from src.widgets.Auth import Auth
 
+from auth import AuthWindow
 
 if __name__ == "__main__":
+    import sys
     app = QApplication(sys.argv)
-    Auth = Auth()
-    Auth.show()
+    window = AuthWindow()
+    window.show()
     sys.exit(app.exec())
