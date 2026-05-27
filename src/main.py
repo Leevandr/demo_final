@@ -6,6 +6,6 @@ from src.widgets.Auth import Auth
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    Auth = Auth()
-    Auth.show()
+    auth = Auth()
+    auth.show()
     sys.exit(app.exec())

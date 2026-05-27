@@ -9,6 +9,9 @@ from src.db import dao
 from src.widgets.ItemWidget import image_path
 from ui.gen.ItemDialog import Ui_ItemDialog
 
+IMAGE_WIDTH = 300
+IMAGE_HEIGHT = 200
+
 
 class ItemDialog(QDialog):
     def __init__(self, item=None):
@@ -18,9 +21,9 @@ class ItemDialog(QDialog):
         self.item = item
         self.image_name = "img.png"
         self.fill()
+        if self.item and self.item["image"] and self.item["image"] != "None":
+            self.image_name = self.item["image"]
         if self.item:
-            if self.item["image"] and self.item["image"] != "None":
-                self.image_name = self.item["image"]
             self.fill_exist()
 
         self.ui.pushButton_save.clicked.connect(self.save)
@@ -48,8 +51,8 @@ class ItemDialog(QDialog):
                 shutil.copy(src, dst)
         else:
             pixmap = pixmap.scaled(
-                300,
-                200,
+                IMAGE_WIDTH,
+                IMAGE_HEIGHT,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation
             )
@@ -58,27 +61,12 @@ class ItemDialog(QDialog):
         self.image_name = src.name
 
         pixmap = QPixmap(str(dst)).scaled(
-            300,
-            200,
+            IMAGE_WIDTH,
+            IMAGE_HEIGHT,
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         )
         self.ui.label.setPixmap(pixmap)
-
-    def delete_old_image(self, new_image):
-        if not self.item:
-            return
-
-        old_image = self.item.get("image")
-        if not old_image or old_image in ("None", "img.png") or old_image == new_image:
-            return
-
-        old_path = Path(image_path(old_image))
-        try:
-            if old_path.exists():
-                old_path.unlink()
-        except OSError:
-            pass
 
     def fill_exist(self):
         item = self.item
@@ -99,26 +87,24 @@ class ItemDialog(QDialog):
         if pixmap.isNull():
             pixmap = QPixmap(image_path("img.png"))
 
-        pixmap = pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio)
+        pixmap = pixmap.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt.AspectRatioMode.KeepAspectRatio)
         self.ui.label.setPixmap(pixmap)
-
 
     def fill(self):
         categories = dao.get_all_categories()
         for category in categories:
-            self.ui.categoryComboBox.addItem(category["title"])
+            self.ui.categoryComboBox.addItem(category["title"], category["id"])
         suppilers = dao.get_all_suppilers()
         for suppiler in suppilers:
-            self.ui.suppilerComboBox.addItem(suppiler["title"])
+            self.ui.suppilerComboBox.addItem(suppiler["title"], suppiler["id"])
         manufactures = dao.get_all_manufactures()
         for manufacture in manufactures:
-            self.ui.manufactureComboBox.addItem(manufacture["title"])
+            self.ui.manufactureComboBox.addItem(manufacture["title"], manufacture["id"])
         units = dao.get_all_units()
         for unit in units:
-            self.ui.unitComboBox.addItem(unit["title"])
+            self.ui.unitComboBox.addItem(unit["title"], unit["id"])
 
     def save(self):
-
         article = self.ui.spinBox.value()
         title = self.ui.titleLineEdit.text()
         description = self.ui.descriptionLineEdit.text()
@@ -127,18 +113,10 @@ class ItemDialog(QDialog):
             QMessageBox.warning(self, "Ошибка", "Введите название товара")
             return
 
-        category = self.ui.categoryComboBox.currentText()
-        category_id = dao.get_category_id(category)["id"]
-
-        manufacture = self.ui.manufactureComboBox.currentText()
-        manufacture_id = dao.get_manufacture_id(manufacture)["id"]
-
-        suppiler = self.ui.suppilerComboBox.currentText()
-        suppiler_id = dao.get_suppiler_id(suppiler)["id"]
-
-        unit = self.ui.unitComboBox.currentText()
-        unit_id = dao.get_unit_id(unit)["id"]
-
+        category_id = self.ui.categoryComboBox.currentData()
+        manufacture_id = self.ui.manufactureComboBox.currentData()
+        suppiler_id = self.ui.suppilerComboBox.currentData()
+        unit_id = self.ui.unitComboBox.currentData()
         discount = self.ui.discountDoubleSpinBox.value()
         quantity = self.ui.spinBox_quantity.value()
         image = self.image_name or "img.png"
@@ -147,29 +125,28 @@ class ItemDialog(QDialog):
         if self.item:
             product_id = self.item["id"]
             dao.edit_product(product_id,
-                             str(article),
-                             str(title),
-                             str(category_id),
-                             str(description),
-                             str(manufacture_id),
-                             str(suppiler_id),
-                             str(price),
-                             str(unit_id),
-                             str(quantity),
-                             str(discount),
-                             str(image))
-            self.delete_old_image(image)
+                             article,
+                             title,
+                             category_id,
+                             description,
+                             manufacture_id,
+                             suppiler_id,
+                             price,
+                             unit_id,
+                             quantity,
+                             discount,
+                             image)
         else:
-            dao.add_new_product(str(article),
-                                str(title),
-                                str(category_id),
-                                str(description),
-                                str(manufacture_id),
-                                str(suppiler_id),
-                                str(price),
-                                str(unit_id),
-                                str(quantity),
-                                str(discount),
-                                str(image))
+            dao.add_new_product(article,
+                                title,
+                                category_id,
+                                description,
+                                manufacture_id,
+                                suppiler_id,
+                                price,
+                                unit_id,
+                                quantity,
+                                discount,
+                                image)
 
         self.accept()

@@ -143,6 +143,24 @@ class MainWindow(QWidget):
         for order in orders:
             self.ui.verticalLayout_orders.addWidget(ItemOrderWidget(order))
 
+    def hide_action_buttons(self):
+        buttons = [
+            self.ui.pushButton_add_product,
+            self.ui.pushButton_edit_product,
+            self.ui.pushButton_delete_product,
+            self.ui.pushButton_add_order,
+            self.ui.pushButton_edit_order,
+            self.ui.pushButton_delete_order,
+        ]
+        for button in buttons:
+            button.hide()
+
+    def hide_orders_access(self):
+        self.ui.tabWidget.setTabVisible(1, False)
+        self.ui.lineEdit_search.hide()
+        self.ui.comboBox_quantity.hide()
+        self.ui.comboBox_suppilers.hide()
+
     def add_order(self):
         if OrderDialog(user=self.user).exec() == QDialog.DialogCode.Accepted:
             self.add_widgets_orders()
@@ -174,42 +192,18 @@ class MainWindow(QWidget):
             QMessageBox.warning(self, "Ошибка", "Выберите заказ")
 
     def access_setting(self):
-        if self.user:
-            role_id = self.user["role_id"]
+        if not self.user:
+            self.hide_action_buttons()
+            self.hide_orders_access()
+            return
 
-            if role_id in (2, 3):
-                self.ui.pushButton_add_product.setVisible(False)
-                self.ui.pushButton_edit_product.setVisible(False)
-                self.ui.pushButton_delete_product.setVisible(False)
-                self.ui.pushButton_add_order.setVisible(False)
-                self.ui.pushButton_edit_order.setVisible(False)
-                self.ui.pushButton_delete_order.setVisible(False)
-                self.ui.tabWidget.setTabVisible(1, False)
-                self.ui.lineEdit_search.setVisible(False)
-                self.ui.comboBox_quantity.setVisible(False)
-                self.ui.comboBox_suppilers.setVisible(False)
+        role_id = self.user["role_id"]
 
-            if role_id == 4:
-                self.ui.pushButton_add_product.setVisible(False)
-                self.ui.pushButton_edit_product.setVisible(False)
-                self.ui.pushButton_delete_product.setVisible(False)
-                self.ui.pushButton_add_order.setVisible(False)
-                self.ui.pushButton_edit_order.setVisible(False)
-                self.ui.pushButton_delete_order.setVisible(False)
-
-        else:
-            self.ui.pushButton_add_product.setVisible(False)
-            self.ui.pushButton_edit_product.setVisible(False)
-            self.ui.pushButton_delete_product.setVisible(False)
-            self.ui.pushButton_add_order.setVisible(False)
-            self.ui.pushButton_edit_order.setVisible(False)
-            self.ui.pushButton_delete_order.setVisible(False)
-
-            self.ui.tabWidget.setTabVisible(1, False)
-
-            self.ui.lineEdit_search.setVisible(False)
-            self.ui.comboBox_quantity.setVisible(False)
-            self.ui.comboBox_suppilers.setVisible(False)
+        if role_id in (2, 3):
+            self.hide_action_buttons()
+            self.hide_orders_access()
+        elif role_id == 4:
+            self.hide_action_buttons()
 
     def fill_fio(self):
         if self.user:

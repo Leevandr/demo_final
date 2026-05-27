@@ -1,49 +1,47 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import Qt
+from pathlib import Path
+from decimal import Decimal
 
 from ui.gen.ItemWidget import Ui_ItemWidget
-from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 IMAGES_DIR = ROOT_DIR / "resources" / "images"
 
+
 def image_path(filename: str) -> str:
     return str(IMAGES_DIR / filename)
+
 
 class ItemWidget(QWidget):
     def __init__(self, item):
         super().__init__()
         self.ui = Ui_ItemWidget()
         self.ui.setupUi(self)
-        self.default_style = self.styleSheet()
+        self.ui.frame_card.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
         self.item = item
         self.is_selected = False
         self.fill()
 
-    def card_status(self):
+    def price_color(self):
         if int(self.item["quantity"]) <= 0:
-            return "empty"
-        if self.item["discount"] > 15:
-            return "discount"
-        return "normal"
+            return "#1f6feb"
+        return "black"
+
+    def price_text(self, value):
+        price = Decimal(str(value)).quantize(Decimal("0.01"))
+        return str(price)
 
     def apply_style(self):
-        background = "#ffffff"
-        if self.card_status() == "empty":
-            background = "#dff3ff"
-        elif self.card_status() == "discount":
-            background = "#2E8B57"
-
-        border = "4px solid #1f6feb" if self.is_selected else "2px solid #263238"
-        self.setStyleSheet(self.default_style + f"""
-QWidget#ItemWidget {{
-    background-color: {background};
-    border: {border};
-    border-radius: 0px;
-}}
-""")
+        border = "4px solid #1f6feb" if self.is_selected else "1px solid #263238"
+        self.ui.frame_card.setStyleSheet(
+            "QFrame#frame_card { background-color: #ffffff; border: %s; border-radius: 0px; }" % border
+        )
+        self.ui.frame_price.setStyleSheet(
+            "QFrame#frame_price { background-color: #ffffff; border: 1px solid #263238; border-radius: 0px; }"
+        )
 
     def set_selected(self, value: bool):
         self.is_selected = value
@@ -61,17 +59,24 @@ QWidget#ItemWidget {{
         self.ui.label_quantity.setText(f'Остаток: {item["quantity"]} {item["unit"]}')
         self.ui.label_discount.setText(f'Скидка: {item["discount"]} %')
 
-        if item["discount"] > 0:
-            old_price = item["price"]
-            discount = item["discount"]
-            new_price = old_price * (1 - discount / 100)
+        price = Decimal(str(item["price"]))
+        discount = Decimal(str(item["discount"]))
+
+        if discount > 0:
+            new_price = price
+            if discount >= 100:
+                old_price = new_price
+            else:
+                old_price = new_price / (1 - discount / Decimal("100"))
 
             self.ui.label_price.setText(
-                f'<span style="color:red;"> Старая цена: <s>{old_price}</s> Руб</span><br>'
-                f'<span style="color:black;">Новая цена: {round(new_price, 2)} Руб</span>'
+                f'<span style="color:red;">Старая цена: <s>{self.price_text(old_price)}</s> Руб</span><br>'
+                f'<span style="color:{self.price_color()};">Новая цена: {self.price_text(new_price)} Руб</span>'
             )
         else:
-            self.ui.label_price.setText(f'{item["price"]} Руб')
+            self.ui.label_price.setText(
+                f'<span style="color:{self.price_color()};">{self.price_text(price)} Руб</span>'
+            )
 
         image_name = item["image"] or "img.png"
         if image_name == "None":

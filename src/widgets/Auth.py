@@ -32,10 +32,10 @@ class Auth(QWidget):
         login = self.ui.lineEdit_login.text()
         password = self.ui.lineEdit_password.text()
         if not login or not password:
-            QMessageBox.warning(self,"Проверьте логин или пароль", "Введите логин и пароль")
+            QMessageBox.warning(self, "Проверьте логин или пароль", "Введите логин и пароль")
             return
 
-        user = dao.login(login,password)
+        user = dao.login(login, password)
 
         if user:
             self.main_window = MainWindow(user)

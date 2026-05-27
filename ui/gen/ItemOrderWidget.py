@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '.\ui\ItemOrderWidget.ui'
+# Form implementation generated from reading ui file 'ui\ItemOrderWidget.ui'
 #
 # Created by: PyQt6 UI code generator 6.11.0
 #
@@ -12,16 +12,16 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ItemOrderWidget(object):
     def setupUi(self, ItemOrderWidget):
         ItemOrderWidget.setObjectName("ItemOrderWidget")
-        ItemOrderWidget.resize(781, 132)
-        ItemOrderWidget.setMinimumSize(QtCore.QSize(0, 96))
+        ItemOrderWidget.resize(780, 132)
+        ItemOrderWidget.setMinimumSize(QtCore.QSize(0, 116))
         ItemOrderWidget.setStyleSheet("QWidget#ItemOrderWidget {\n"
-"    background-color: #ffffff;\n"
-"    border: 2px solid #263238;\n"
-"    border-radius: 0px;\n"
+"    background-color: transparent;\n"
 "}\n"
 "\n"
-"QWidget#ItemOrderWidget[selected=\"true\"] {\n"
-"    border: 4px solid #1f6feb;\n"
+"QFrame#frame_card {\n"
+"    background-color: #ffffff;\n"
+"    border: 1px solid #263238;\n"
+"    border-radius: 0px;\n"
 "}\n"
 "\n"
 "QFrame#frame_info,\n"
@@ -40,11 +40,18 @@ class Ui_ItemOrderWidget(object):
 "QLabel#label_product_name {\n"
 "    font-weight: bold;\n"
 "}")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(ItemOrderWidget)
-        self.horizontalLayout.setContentsMargins(12, 8, 12, 8)
-        self.horizontalLayout.setSpacing(14)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.frame_info = QtWidgets.QFrame(parent=ItemOrderWidget)
+        self.verticalLayout_root = QtWidgets.QVBoxLayout(ItemOrderWidget)
+        self.verticalLayout_root.setContentsMargins(8, 6, 8, 6)
+        self.verticalLayout_root.setObjectName("verticalLayout_root")
+        self.frame_card = QtWidgets.QFrame(parent=ItemOrderWidget)
+        self.frame_card.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_card.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_card.setObjectName("frame_card")
+        self.horizontalLayout_card = QtWidgets.QHBoxLayout(self.frame_card)
+        self.horizontalLayout_card.setContentsMargins(12, 8, 12, 8)
+        self.horizontalLayout_card.setSpacing(14)
+        self.horizontalLayout_card.setObjectName("horizontalLayout_card")
+        self.frame_info = QtWidgets.QFrame(parent=self.frame_card)
         self.frame_info.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_info.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
         self.frame_info.setObjectName("frame_info")
@@ -65,10 +72,10 @@ class Ui_ItemOrderWidget(object):
         self.label_order_date = QtWidgets.QLabel(parent=self.frame_info)
         self.label_order_date.setObjectName("label_order_date")
         self.verticalLayout_info.addWidget(self.label_order_date)
-        self.horizontalLayout.addWidget(self.frame_info)
-        self.frame_delivery = QtWidgets.QFrame(parent=ItemOrderWidget)
-        self.frame_delivery.setMinimumSize(QtCore.QSize(130, 0))
-        self.frame_delivery.setMaximumSize(QtCore.QSize(160, 16777215))
+        self.horizontalLayout_card.addWidget(self.frame_info)
+        self.frame_delivery = QtWidgets.QFrame(parent=self.frame_card)
+        self.frame_delivery.setMinimumSize(QtCore.QSize(190, 0))
+        self.frame_delivery.setMaximumSize(QtCore.QSize(220, 16777215))
         self.frame_delivery.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_delivery.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
         self.frame_delivery.setObjectName("frame_delivery")
@@ -79,8 +86,9 @@ class Ui_ItemOrderWidget(object):
         self.label_delivery_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_delivery_date.setWordWrap(True)
         self.label_delivery_date.setObjectName("label_delivery_date")
-        self.verticalLayout_delivery.addWidget(self.label_delivery_date)
-        self.horizontalLayout.addWidget(self.frame_delivery)
+        self.verticalLayout_delivery.addWidget(self.label_delivery_date, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.horizontalLayout_card.addWidget(self.frame_delivery)
+        self.verticalLayout_root.addWidget(self.frame_card)
 
         self.retranslateUi(ItemOrderWidget)
         QtCore.QMetaObject.connectSlotsByName(ItemOrderWidget)

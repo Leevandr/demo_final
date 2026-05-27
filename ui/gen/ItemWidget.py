@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '.\ui\ItemWidget.ui'
+# Form implementation generated from reading ui file 'ui\ItemWidget.ui'
 #
 # Created by: PyQt6 UI code generator 6.11.0
 #
@@ -12,25 +12,23 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ItemWidget(object):
     def setupUi(self, ItemWidget):
         ItemWidget.setObjectName("ItemWidget")
-        ItemWidget.resize(600, 256)
-        ItemWidget.setMinimumSize(QtCore.QSize(0, 190))
-        ItemWidget.setMaximumSize(QtCore.QSize(16777215, 55555))
+        ItemWidget.resize(780, 190)
+        ItemWidget.setMinimumSize(QtCore.QSize(0, 170))
         ItemWidget.setStyleSheet("QWidget#ItemWidget {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"QFrame#frame_card {\n"
 "    background-color: #ffffff;\n"
-"    border: 2px solid #263238;\n"
+"    border: 1px solid #263238;\n"
 "    border-radius: 0px;\n"
 "}\n"
 "\n"
-"QWidget#ItemWidget[cardStatus=\"empty\"] {\n"
-"    background-color: #dff3ff;\n"
-"}\n"
-"\n"
-"QWidget#ItemWidget[cardStatus=\"discount\"] {\n"
-"    background-color: #2E8B57;\n"
-"}\n"
-"\n"
-"QWidget#ItemWidget[selected=\"true\"] {\n"
-"    border: 4px solid #1f6feb;\n"
+"QFrame#frame_image,\n"
+"QFrame#frame_info,\n"
+"QFrame#frame_price {\n"
+"    background-color: transparent;\n"
+"    border: 1px solid #263238;\n"
 "}\n"
 "\n"
 "QLabel {\n"
@@ -40,9 +38,13 @@ class Ui_ItemWidget(object):
 "    background: transparent;\n"
 "}\n"
 "\n"
-"QLabel#label_title {\n"
-"    font-size: 18px;\n"
+"QLabel#label_title,\n"
+"QLabel#label_price {\n"
 "    font-weight: bold;\n"
+"}\n"
+"\n"
+"QLabel#label_title {\n"
+"    font-size: 16px;\n"
 "}\n"
 "\n"
 "QLabel#label_discount {\n"
@@ -51,113 +53,107 @@ class Ui_ItemWidget(object):
 "    font-weight: bold;\n"
 "}\n"
 "\n"
-"QLabel#label_price {\n"
-"    font-size: 15px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
 "QLabel#label_image {\n"
-"    background-color: transparent;\n"
-"    border: 1px solid #263238;\n"
-"    border-radius: 0px;\n"
-"}\n"
-"\n"
-"QWidget#ItemWidget[selected=\"true\"] QLabel {\n"
 "    border: none;\n"
-"}\n"
-"\n"
-"QWidget#ItemWidget[selected=\"true\"] QLabel#label_image {\n"
-"    border: 1px solid #263238;\n"
+"    background-color: transparent;\n"
 "}")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(ItemWidget)
-        self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setSpacing(12)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label_image = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.verticalLayout_root = QtWidgets.QVBoxLayout(ItemWidget)
+        self.verticalLayout_root.setContentsMargins(8, 6, 8, 6)
+        self.verticalLayout_root.setObjectName("verticalLayout_root")
+        self.frame_card = QtWidgets.QFrame(parent=ItemWidget)
+        self.frame_card.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_card.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_card.setObjectName("frame_card")
+        self.horizontalLayout_card = QtWidgets.QHBoxLayout(self.frame_card)
+        self.horizontalLayout_card.setContentsMargins(12, 8, 12, 8)
+        self.horizontalLayout_card.setSpacing(14)
+        self.horizontalLayout_card.setObjectName("horizontalLayout_card")
+        self.frame_image = QtWidgets.QFrame(parent=self.frame_card)
+        self.frame_image.setMinimumSize(QtCore.QSize(170, 150))
+        self.frame_image.setMaximumSize(QtCore.QSize(170, 16777215))
+        self.frame_image.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_image.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_image.setObjectName("frame_image")
+        self.verticalLayout_image = QtWidgets.QVBoxLayout(self.frame_image)
+        self.verticalLayout_image.setContentsMargins(8, 8, 8, 8)
+        self.verticalLayout_image.setObjectName("verticalLayout_image")
+        self.label_image = QtWidgets.QLabel(parent=self.frame_image)
         self.label_image.setMinimumSize(QtCore.QSize(150, 150))
         self.label_image.setMaximumSize(QtCore.QSize(150, 150))
+        self.label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_image.setObjectName("label_image")
-        self.horizontalLayout.addWidget(self.label_image)
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.label_article = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_article.setMinimumSize(QtCore.QSize(0, 30))
+        self.verticalLayout_image.addWidget(self.label_image, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.horizontalLayout_card.addWidget(self.frame_image)
+        self.frame_info = QtWidgets.QFrame(parent=self.frame_card)
+        self.frame_info.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_info.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_info.setObjectName("frame_info")
+        self.verticalLayout_info = QtWidgets.QVBoxLayout(self.frame_info)
+        self.verticalLayout_info.setContentsMargins(10, 8, 10, 8)
+        self.verticalLayout_info.setSpacing(4)
+        self.verticalLayout_info.setObjectName("verticalLayout_info")
+        self.label_article = QtWidgets.QLabel(parent=self.frame_info)
         self.label_article.setObjectName("label_article")
-        self.verticalLayout_3.addWidget(self.label_article)
-        self.label_title = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_title.setMinimumSize(QtCore.QSize(0, 30))
+        self.verticalLayout_info.addWidget(self.label_article)
+        self.label_title = QtWidgets.QLabel(parent=self.frame_info)
         self.label_title.setWordWrap(True)
         self.label_title.setObjectName("label_title")
-        self.verticalLayout_3.addWidget(self.label_title)
-        self.label_category = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_category.setMinimumSize(QtCore.QSize(0, 30))
+        self.verticalLayout_info.addWidget(self.label_title)
+        self.label_category = QtWidgets.QLabel(parent=self.frame_info)
         self.label_category.setObjectName("label_category")
-        self.verticalLayout_3.addWidget(self.label_category)
-        self.label_description = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_description.setMinimumSize(QtCore.QSize(200, 30))
+        self.verticalLayout_info.addWidget(self.label_category)
+        self.label_description = QtWidgets.QLabel(parent=self.frame_info)
         self.label_description.setWordWrap(True)
         self.label_description.setObjectName("label_description")
-        self.verticalLayout_3.addWidget(self.label_description)
-        self.label_manufacrure = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_manufacrure.setMinimumSize(QtCore.QSize(0, 30))
+        self.verticalLayout_info.addWidget(self.label_description)
+        self.label_manufacrure = QtWidgets.QLabel(parent=self.frame_info)
         self.label_manufacrure.setObjectName("label_manufacrure")
-        self.verticalLayout_3.addWidget(self.label_manufacrure)
-        self.label_suppiler = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_suppiler.setMinimumSize(QtCore.QSize(0, 30))
+        self.verticalLayout_info.addWidget(self.label_manufacrure)
+        self.label_suppiler = QtWidgets.QLabel(parent=self.frame_info)
         self.label_suppiler.setObjectName("label_suppiler")
-        self.verticalLayout_3.addWidget(self.label_suppiler)
-        self.label_quantity = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_quantity.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.verticalLayout_info.addWidget(self.label_suppiler)
+        self.label_quantity = QtWidgets.QLabel(parent=self.frame_info)
         self.label_quantity.setObjectName("label_quantity")
-        self.verticalLayout_3.addWidget(self.label_quantity)
-        self.horizontalLayout.addLayout(self.verticalLayout_3)
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.label_discount = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_discount.setMinimumSize(QtCore.QSize(0, 0))
-        self.label_discount.setMaximumSize(QtCore.QSize(90, 40))
-        font = QtGui.QFont()
-        font.setFamily("Palatino Linotype")
-        font.setPointSize(16)
-        font.setBold(False)
-        self.label_discount.setFont(font)
+        self.verticalLayout_info.addWidget(self.label_quantity)
+        self.horizontalLayout_card.addWidget(self.frame_info)
+        self.frame_price = QtWidgets.QFrame(parent=self.frame_card)
+        self.frame_price.setMinimumSize(QtCore.QSize(190, 0))
+        self.frame_price.setMaximumSize(QtCore.QSize(220, 16777215))
+        self.frame_price.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_price.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
+        self.frame_price.setObjectName("frame_price")
+        self.verticalLayout_price = QtWidgets.QVBoxLayout(self.frame_price)
+        self.verticalLayout_price.setContentsMargins(8, 8, 8, 8)
+        self.verticalLayout_price.setObjectName("verticalLayout_price")
+        self.label_discount = QtWidgets.QLabel(parent=self.frame_price)
+        self.label_discount.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_discount.setObjectName("label_discount")
-        self.verticalLayout_4.addWidget(self.label_discount, 0, QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTop)
-        self.label_price = QtWidgets.QLabel(parent=ItemWidget)
-        self.label_price.setMinimumSize(QtCore.QSize(100, 0))
-        self.label_price.setMaximumSize(QtCore.QSize(400, 200))
-        font = QtGui.QFont()
-        font.setFamily("Palatino Linotype")
-        font.setPointSize(10)
-        font.setBold(False)
-        self.label_price.setFont(font)
-        self.label_price.setWordWrap(True)
-        self.label_price.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.verticalLayout_price.addWidget(self.label_discount, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.verticalLayout_price.addItem(spacerItem)
+        self.label_price = QtWidgets.QLabel(parent=self.frame_price)
         self.label_price.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_price.setWordWrap(True)
         self.label_price.setObjectName("label_price")
-        self.verticalLayout_4.addWidget(self.label_price, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignTop)
-        self.horizontalLayout.addLayout(self.verticalLayout_4)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_price.addWidget(self.label_price, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.verticalLayout_price.addItem(spacerItem1)
+        self.horizontalLayout_card.addWidget(self.frame_price)
+        self.verticalLayout_root.addWidget(self.frame_card)
 
         self.retranslateUi(ItemWidget)
         QtCore.QMetaObject.connectSlotsByName(ItemWidget)
 
     def retranslateUi(self, ItemWidget):
         _translate = QtCore.QCoreApplication.translate
-        ItemWidget.setWindowTitle(_translate("ItemWidget", "Form"))
-        self.label_image.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_article.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_title.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_category.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_description.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_manufacrure.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_suppiler.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_quantity.setText(_translate("ItemWidget", "TextLabel"))
-        self.label_discount.setText(_translate("ItemWidget", "5 %"))
-        self.label_price.setText(_translate("ItemWidget", "12300"))
+        ItemWidget.setWindowTitle(_translate("ItemWidget", "Товар"))
+        self.label_image.setText(_translate("ItemWidget", "Изображение"))
+        self.label_article.setText(_translate("ItemWidget", "Артикул товара"))
+        self.label_title.setText(_translate("ItemWidget", "Название товара"))
+        self.label_category.setText(_translate("ItemWidget", "Категория товара"))
+        self.label_description.setText(_translate("ItemWidget", "Описание товара"))
+        self.label_manufacrure.setText(_translate("ItemWidget", "Производитель товара"))
+        self.label_suppiler.setText(_translate("ItemWidget", "Поставщик товара"))
+        self.label_quantity.setText(_translate("ItemWidget", "Остаток товара"))
+        self.label_discount.setText(_translate("ItemWidget", "Скидка"))
+        self.label_price.setText(_translate("ItemWidget", "Цена товара"))

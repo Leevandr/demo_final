@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget
 
 from ui.gen.ItemOrderWidget import Ui_ItemOrderWidget
@@ -8,21 +9,17 @@ class ItemOrderWidget(QWidget):
         super().__init__()
         self.ui = Ui_ItemOrderWidget()
         self.ui.setupUi(self)
-        self.default_style = self.styleSheet()
+        self.ui.frame_card.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
         self.item = item
         self.is_selected = False
         self.fill()
 
     def apply_style(self):
-        border = "4px solid #1f6feb" if self.is_selected else "2px solid #263238"
-        self.setStyleSheet(self.default_style + f"""
-QWidget#ItemOrderWidget {{
-    background-color: #ffffff;
-    border: {border};
-    border-radius: 0px;
-}}
-""")
+        border = "4px solid #1f6feb" if self.is_selected else "1px solid #263238"
+        self.ui.frame_card.setStyleSheet(
+            "QFrame#frame_card { background-color: #ffffff; border: %s; border-radius: 0px; }" % border
+        )
 
     def set_selected(self, value: bool):
         self.is_selected = value
