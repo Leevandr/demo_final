@@ -97,32 +97,47 @@ class Database:
 
     def add_new_product(self, article, title, category_id, description, manufacture_id, suppiler_id, price, unit_id,
                         quantity, discount, image):
-        with self.cursor() as cur:
-            cur.execute(
-                "insert into products(article,title,category_id,description,manufacture_id,suppiler_id,price,unit_id,quantity,discount,image_path)"
-                "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (article, title, category_id, description, manufacture_id, suppiler_id, price, unit_id, quantity,
-                 discount, image))
-            self.conn.commit()
+        try:
+            with self.cursor() as cur:
+                cur.execute(
+                    "insert into products(article,title,category_id,description,manufacture_id,suppiler_id,price,unit_id,quantity,discount,image_path)"
+                    "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (article, title, category_id, description, manufacture_id, suppiler_id, price, unit_id, quantity,
+                     discount, image))
+                self.conn.commit()
+            return True
+        except pymysql.MySQLError:
+            self.conn.rollback()
+            return False
 
     def edit_product(self, product_id, article, title, category_id, description, manufacture_id, suppiler_id, price,
                      unit_id, quantity, discount, image):
+        try:
+            with self.cursor() as cur:
+                cur.execute("update products set "
+                            "article = %s,"
+                            "title = %s,"
+                            "category_id = %s,"
+                            "description = %s,"
+                            "manufacture_id = %s,"
+                            "suppiler_id = %s,"
+                            "price = %s,"
+                            "unit_id = %s,"
+                            "quantity = %s,"
+                            "discount = %s,"
+                            "image_path = %s where id = %s",
+                            (article, title, category_id, description, manufacture_id, suppiler_id, price, unit_id,
+                             quantity, discount, image, product_id))
+                self.conn.commit()
+            return True
+        except pymysql.MySQLError:
+            self.conn.rollback()
+            return False
+
+    def get_image_usage_count(self, image):
         with self.cursor() as cur:
-            cur.execute("update products set "
-                        "article = %s,"
-                        "title = %s,"
-                        "category_id = %s,"
-                        "description = %s,"
-                        "manufacture_id = %s,"
-                        "suppiler_id = %s,"
-                        "price = %s,"
-                        "unit_id = %s,"
-                        "quantity = %s,"
-                        "discount = %s,"
-                        "image_path = %s where id = %s",
-                        (article, title, category_id, description, manufacture_id, suppiler_id, price, unit_id,
-                         quantity, discount, image, product_id))
-            self.conn.commit()
+            cur.execute("select count(*) as count from products where image_path = %s", (image,))
+        return cur.fetchone()["count"]
 
     def delete_product(self, p_id):
         try:

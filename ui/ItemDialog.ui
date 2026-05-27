@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>520</height>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,9 +83,12 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QSpinBox" name="priceSpinBox">
+        <widget class="QDoubleSpinBox" name="priceSpinBox">
+         <property name="decimals">
+          <number>2</number>
+         </property>
          <property name="maximum">
-          <number>990000</number>
+          <double>990000.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -170,11 +173,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBox">
-         <property name="maximum">
-          <number>9900000</number>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="articleLineEdit"/>
        </item>
        <item row="8" column="1">
         <widget class="QSpinBox" name="spinBox_quantity">

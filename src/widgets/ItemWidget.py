@@ -25,22 +25,28 @@ class ItemWidget(QWidget):
         self.is_selected = False
         self.fill()
 
-    def price_color(self):
-        if int(self.item["quantity"]) <= 0:
-            return "#1f6feb"
-        return "black"
-
     def price_text(self, value):
         price = Decimal(str(value)).quantize(Decimal("0.01"))
         return str(price)
 
+    def card_background(self):
+        quantity = int(self.item["quantity"])
+        discount = Decimal(str(self.item["discount"]))
+
+        if quantity <= 0:
+            return "#87CEEB"
+        if discount > Decimal("15"):
+            return "#2E8B57"
+        return "#ffffff"
+
     def apply_style(self):
         border = "4px solid #1f6feb" if self.is_selected else "1px solid #263238"
+        background = self.card_background()
         self.ui.frame_card.setStyleSheet(
-            "QFrame#frame_card { background-color: #ffffff; border: %s; border-radius: 0px; }" % border
+            "QFrame#frame_card { background-color: %s; border: %s; border-radius: 0px; }" % (background, border)
         )
         self.ui.frame_price.setStyleSheet(
-            "QFrame#frame_price { background-color: #ffffff; border: 1px solid #263238; border-radius: 0px; }"
+            "QFrame#frame_price { background-color: %s; border: 1px solid #263238; border-radius: 0px; }" % background
         )
 
     def set_selected(self, value: bool):
@@ -63,19 +69,17 @@ class ItemWidget(QWidget):
         discount = Decimal(str(item["discount"]))
 
         if discount > 0:
-            new_price = price
-            if discount >= 100:
-                old_price = new_price
-            else:
-                old_price = new_price / (1 - discount / Decimal("100"))
+            final_price = price * (Decimal("1") - discount / Decimal("100"))
+            if final_price < 0:
+                final_price = Decimal("0")
 
             self.ui.label_price.setText(
-                f'<span style="color:red;">Старая цена: <s>{self.price_text(old_price)}</s> Руб</span><br>'
-                f'<span style="color:{self.price_color()};">Новая цена: {self.price_text(new_price)} Руб</span>'
+                f'<span style="color:red;">Цена: <s>{self.price_text(price)}</s> Руб</span><br>'
+                f'<span style="color:black;">Итоговая цена: {self.price_text(final_price)} Руб</span>'
             )
         else:
             self.ui.label_price.setText(
-                f'<span style="color:{self.price_color()};">{self.price_text(price)} Руб</span>'
+                f'<span style="color:black;">Цена: {self.price_text(price)} Руб</span>'
             )
 
         image_name = item["image"] or "img.png"

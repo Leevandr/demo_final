@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '.\ui\MainWidget.ui'
+# Form implementation generated from reading ui file 'ui\MainWidget.ui'
 #
 # Created by: PyQt6 UI code generator 6.11.0
 #
@@ -138,4 +138,4 @@ class Ui_MainWidget(object):
         self.pushButton_add_order.setText(_translate("MainWidget", "Добавить"))
         self.pushButton_delete_order.setText(_translate("MainWidget", "Удалить"))
         self.pushButton_edit_order.setText(_translate("MainWidget", "Редактировать"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWidget", "Все Заказы"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWidget", "Заказы"))

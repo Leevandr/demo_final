@@ -174,7 +174,7 @@
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>Все Заказы</string>
+         <string>Заказы</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>

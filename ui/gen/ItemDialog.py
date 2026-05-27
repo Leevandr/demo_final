@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '.\ui\ItemDialog.ui'
+# Form implementation generated from reading ui file 'ui\ItemDialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.11.0
 #
@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ItemDialog(object):
     def setupUi(self, ItemDialog):
         ItemDialog.setObjectName("ItemDialog")
-        ItemDialog.resize(511, 520)
+        ItemDialog.resize(511, 560)
         self.horizontalLayout = QtWidgets.QHBoxLayout(ItemDialog)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -55,8 +55,9 @@ class Ui_ItemDialog(object):
         self.priceLabel = QtWidgets.QLabel(parent=ItemDialog)
         self.priceLabel.setObjectName("priceLabel")
         self.formLayout.setWidget(6, QtWidgets.QFormLayout.ItemRole.LabelRole, self.priceLabel)
-        self.priceSpinBox = QtWidgets.QSpinBox(parent=ItemDialog)
-        self.priceSpinBox.setMaximum(990000)
+        self.priceSpinBox = QtWidgets.QDoubleSpinBox(parent=ItemDialog)
+        self.priceSpinBox.setDecimals(2)
+        self.priceSpinBox.setMaximum(990000.0)
         self.priceSpinBox.setObjectName("priceSpinBox")
         self.formLayout.setWidget(6, QtWidgets.QFormLayout.ItemRole.FieldRole, self.priceSpinBox)
         self.unitLabel = QtWidgets.QLabel(parent=ItemDialog)
@@ -90,10 +91,9 @@ class Ui_ItemDialog(object):
         self.pushButton_save = QtWidgets.QPushButton(parent=ItemDialog)
         self.pushButton_save.setObjectName("pushButton_save")
         self.formLayout.setWidget(12, QtWidgets.QFormLayout.ItemRole.FieldRole, self.pushButton_save)
-        self.spinBox = QtWidgets.QSpinBox(parent=ItemDialog)
-        self.spinBox.setMaximum(9900000)
-        self.spinBox.setObjectName("spinBox")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.spinBox)
+        self.articleLineEdit = QtWidgets.QLineEdit(parent=ItemDialog)
+        self.articleLineEdit.setObjectName("articleLineEdit")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.articleLineEdit)
         self.spinBox_quantity = QtWidgets.QSpinBox(parent=ItemDialog)
         self.spinBox_quantity.setMaximum(99000)
         self.spinBox_quantity.setObjectName("spinBox_quantity")

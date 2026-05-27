@@ -1,134 +1,88 @@
--- phpMyAdmin SQL Dump
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Хост: 127.0.0.1:3308
--- Время создания: Май 26 2026 г., 01:02
--- Версия сервера: 5.6.51-log
--- Версия PHP: 7.3.33
-
+-- SQL dump for demo exam project
+-- Generated from local database `shoes`
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
+SET NAMES utf8mb4;
+START TRANSACTION;
+CREATE DATABASE IF NOT EXISTS `shoes` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `shoes`;
+SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `orders`;
+DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `pickup_points`;
+DROP TABLE IF EXISTS `order_statuses`;
+DROP TABLE IF EXISTS `units`;
+DROP TABLE IF EXISTS `suppilers`;
+DROP TABLE IF EXISTS `manufactures`;
+DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `roles`;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- Structure for table `roles`
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- База данных: `shoes`
---
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `categories`
---
-
+-- Structure for table `categories`
 CREATE TABLE `categories` (
-  `id` int(11) NOT NULL,
-  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `categories`
---
-
-INSERT INTO `categories` (`id`, `title`) VALUES
-(1, 'Кроссовки'),
-(2, 'Туфли');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `manufactures`
---
-
+-- Structure for table `manufactures`
 CREATE TABLE `manufactures` (
-  `id` int(11) NOT NULL,
-  `title` varchar(111) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(111) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `manufactures`
---
+-- Structure for table `suppilers`
+CREATE TABLE `suppilers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `manufactures` (`id`, `title`) VALUES
-(1, 'Завод Москва'),
-(2, 'Завод Питер');
+-- Structure for table `units`
+CREATE TABLE `units` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Структура таблицы `orders`
---
-
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  `pickup_point_id` int(11) NOT NULL,
-  `order_date` date NOT NULL,
-  `delivery_date` date NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `orders`
---
-
-INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES
-(1, 1, 1, 1, '2026-05-26', '2026-05-30', 2);
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `order_statuses`
---
-
+-- Structure for table `order_statuses`
 CREATE TABLE `order_statuses` (
-  `id` int(11) NOT NULL,
-  `title` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `order_statuses`
---
-
-INSERT INTO `order_statuses` (`id`, `title`) VALUES
-(1, 'Создан'),
-(2, 'Оформлен'),
-(3, 'Оплачен');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `pickup_points`
---
-
+-- Structure for table `pickup_points`
 CREATE TABLE `pickup_points` (
-  `id` int(11) NOT NULL,
-  `address` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `address` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `pickup_points`
---
+-- Structure for table `users`
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `login` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `pickup_points` (`id`, `address`) VALUES
-(1, 'Moscow'),
-(2, 'Saint-Peterburg');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `products`
---
-
+-- Structure for table `products`
 CREATE TABLE `products` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `article` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` int(11) NOT NULL,
@@ -139,269 +93,88 @@ CREATE TABLE `products` (
   `unit_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `discount` decimal(5,2) NOT NULL,
-  `image_path` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `image_path` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article` (`article`),
+  KEY `category_id` (`category_id`),
+  KEY `manufacture_id` (`manufacture_id`),
+  KEY `suppiler_id` (`suppiler_id`),
+  KEY `unit_id` (`unit_id`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`manufacture_id`) REFERENCES `manufactures` (`id`),
+  CONSTRAINT `products_ibfk_3` FOREIGN KEY (`suppiler_id`) REFERENCES `suppilers` (`id`),
+  CONSTRAINT `products_ibfk_4` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `products`
---
+-- Structure for table `orders`
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `status_id` int(11) NOT NULL,
+  `pickup_point_id` int(11) NOT NULL,
+  `order_date` date NOT NULL,
+  `delivery_date` date NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pickup_point_id` (`pickup_point_id`),
+  KEY `product_id` (`product_id`),
+  KEY `status_id` (`status_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`pickup_point_id`) REFERENCES `pickup_points` (`id`),
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`status_id`) REFERENCES `order_statuses` (`id`),
+  CONSTRAINT `orders_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `products` (`id`, `article`, `title`, `category_id`, `description`, `manufacture_id`, `suppiler_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`) VALUES
-(1, '12333', 'Кроссовки', 1, 'кроссы', 1, 1, '1400.00', 1, 1, '0.00', 'nike.png'),
-(3, '123', 'sdf', 1, 'sdf', 1, 1, '12.00', 1, 3, '10.00', 'photo_2026-05-26_00-11-35.jpg'),
-(4, '777', 'Ботинки', 2, 'Зимняя обувь', 2, 2, '3200.00', 1, 0, '5.00', 'img.png'),
-(5, '999', 'Кеды', 1, 'Повседневная обувь', 1, 3, '2500.00', 1, 8, '20.00', 'img.png');
+-- Data for table `roles`
+INSERT INTO `roles` (`id`, `title`) VALUES (1, 'admin');
+INSERT INTO `roles` (`id`, `title`) VALUES (2, 'client');
+INSERT INTO `roles` (`id`, `title`) VALUES (3, 'guest');
+INSERT INTO `roles` (`id`, `title`) VALUES (4, 'manager');
 
--- --------------------------------------------------------
+-- Data for table `categories`
+INSERT INTO `categories` (`id`, `title`) VALUES (1, 'Кроссовки');
+INSERT INTO `categories` (`id`, `title`) VALUES (2, 'Туфли');
 
---
--- Структура таблицы `roles`
---
+-- Data for table `manufactures`
+INSERT INTO `manufactures` (`id`, `title`) VALUES (1, 'Завод Москва');
+INSERT INTO `manufactures` (`id`, `title`) VALUES (2, 'Завод Питер');
 
-CREATE TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- Data for table `suppilers`
+INSERT INTO `suppilers` (`id`, `title`) VALUES (1, 'Поставщик Москва');
+INSERT INTO `suppilers` (`id`, `title`) VALUES (2, 'Поставщик Питер');
+INSERT INTO `suppilers` (`id`, `title`) VALUES (3, 'Поставщик TORCH');
 
---
--- Дамп данных таблицы `roles`
---
+-- Data for table `units`
+INSERT INTO `units` (`id`, `title`) VALUES (1, 'Шт');
 
-INSERT INTO `roles` (`id`, `title`) VALUES
-(1, 'admin'),
-(2, 'client'),
-(3, 'guest'),
-(4, 'manager');
+-- Data for table `order_statuses`
+INSERT INTO `order_statuses` (`id`, `title`) VALUES (1, 'Создан');
+INSERT INTO `order_statuses` (`id`, `title`) VALUES (2, 'Оформлен');
+INSERT INTO `order_statuses` (`id`, `title`) VALUES (3, 'Оплачен');
 
--- --------------------------------------------------------
+-- Data for table `pickup_points`
+INSERT INTO `pickup_points` (`id`, `address`) VALUES (1, 'Moscow');
+INSERT INTO `pickup_points` (`id`, `address`) VALUES (2, 'Saint-Peterburg');
 
---
--- Структура таблицы `suppilers`
---
+-- Data for table `users`
+INSERT INTO `users` (`id`, `full_name`, `login`, `password`, `role_id`) VALUES (1, 'Устименко Лев Романович', 'levandr', '1', 1);
+INSERT INTO `users` (`id`, `full_name`, `login`, `password`, `role_id`) VALUES (2, 'admin', 'admin', '1', 1);
+INSERT INTO `users` (`id`, `full_name`, `login`, `password`, `role_id`) VALUES (3, 'manager', 'manager', '1', 4);
+INSERT INTO `users` (`id`, `full_name`, `login`, `password`, `role_id`) VALUES (4, 'client', 'client', '1', 2);
 
-CREATE TABLE `suppilers` (
-  `id` int(11) NOT NULL,
-  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- Data for table `products`
+INSERT INTO `products` (`id`, `article`, `title`, `category_id`, `description`, `manufacture_id`, `suppiler_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`) VALUES (1, '12333', 'Кроссовки', 1, 'кроссы', 1, 1, 1400.00, 1, 45, 90.00, '123123.png');
+INSERT INTO `products` (`id`, `article`, `title`, `category_id`, `description`, `manufacture_id`, `suppiler_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`) VALUES (3, '123', 'Nke Monarch', 1, 'КРУТЫЕ КРОССОВКИ ЗА ЛЯМ ДВЕСТИ ', 1, 1, 12.00, 1, 2, 10.00, 'photo_2026-05-26_00-11-35.jpg');
+INSERT INTO `products` (`id`, `article`, `title`, `category_id`, `description`, `manufacture_id`, `suppiler_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`) VALUES (4, '0', 'fffff', 1, '', 1, 2, 4444.00, 1, 111, 20.00, 'img.png');
+INSERT INTO `products` (`id`, `article`, `title`, `category_id`, `description`, `manufacture_id`, `suppiler_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`) VALUES (5, '23', 'ыва', 1, 'ыва', 1, 1, 123.00, 1, 123, 10.00, 'None');
 
---
--- Дамп данных таблицы `suppilers`
---
+-- Data for table `orders`
+INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES (1, 1, 2, 2, '2026-05-27', '2026-05-27', 2);
+INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES (2, 3, 1, 1, '2026-05-27', '2026-05-27', 2);
+INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES (3, 3, 2, 1, '2026-05-27', '2026-05-27', 2);
+INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES (4, 1, 1, 1, '2026-04-30', '2026-05-27', 2);
+INSERT INTO `orders` (`id`, `product_id`, `status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`) VALUES (5, 3, 1, 1, '2026-05-27', '2026-05-27', 2);
 
-INSERT INTO `suppilers` (`id`, `title`) VALUES
-(1, 'Поставщик Москва'),
-(2, 'Поставщик Питер'),
-(3, 'Поставщик TORCH');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `units`
---
-
-CREATE TABLE `units` (
-  `id` int(11) NOT NULL,
-  `title` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `units`
---
-
-INSERT INTO `units` (`id`, `title`) VALUES
-(1, 'Шт');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `full_name` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `users`
---
-
-INSERT INTO `users` (`id`, `full_name`, `login`, `password`, `role_id`) VALUES
-(1, 'Устименко Лев Романович', 'levandr', '1', 1),
-(2, 'admin', 'admin', '1', 1),
-(3, 'manager', 'manager', '1', 4),
-(4, 'client', 'client', '1', 2);
-
---
--- Индексы сохранённых таблиц
---
-
---
--- Индексы таблицы `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `manufactures`
---
-ALTER TABLE `manufactures`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pickup_point_id` (`pickup_point_id`),
-  ADD KEY `product_id` (`product_id`),
-  ADD KEY `status_id` (`status_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Индексы таблицы `order_statuses`
---
-ALTER TABLE `order_statuses`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `pickup_points`
---
-ALTER TABLE `pickup_points`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `products`
---
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `article` (`article`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `manufacture_id` (`manufacture_id`),
-  ADD KEY `suppiler_id` (`suppiler_id`),
-  ADD KEY `unit_id` (`unit_id`);
-
---
--- Индексы таблицы `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `suppilers`
---
-ALTER TABLE `suppilers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `units`
---
-ALTER TABLE `units`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `role_id` (`role_id`);
-
---
--- AUTO_INCREMENT для сохранённых таблиц
---
-
---
--- AUTO_INCREMENT для таблицы `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT для таблицы `manufactures`
---
-ALTER TABLE `manufactures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT для таблицы `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT для таблицы `order_statuses`
---
-ALTER TABLE `order_statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT для таблицы `pickup_points`
---
-ALTER TABLE `pickup_points`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT для таблицы `products`
---
-ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT для таблицы `roles`
---
-ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT для таблицы `suppilers`
---
-ALTER TABLE `suppilers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT для таблицы `units`
---
-ALTER TABLE `units`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT для таблицы `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- Ограничения внешнего ключа сохраненных таблиц
---
-
---
--- Ограничения внешнего ключа таблицы `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`pickup_point_id`) REFERENCES `pickup_points` (`id`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`status_id`) REFERENCES `order_statuses` (`id`),
-  ADD CONSTRAINT `orders_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`manufacture_id`) REFERENCES `manufactures` (`id`),
-  ADD CONSTRAINT `products_ibfk_3` FOREIGN KEY (`suppiler_id`) REFERENCES `suppilers` (`id`),
-  ADD CONSTRAINT `products_ibfk_4` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

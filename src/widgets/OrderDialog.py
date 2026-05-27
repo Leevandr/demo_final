@@ -64,6 +64,10 @@ class OrderDialog(QDialog):
         order_date = self.ui.orderDateEdit.date().toString("yyyy-MM-dd")
         delivery_date = self.ui.deliveryDateEdit.date().toString("yyyy-MM-dd")
 
+        if self.ui.deliveryDateEdit.date() < self.ui.orderDateEdit.date():
+            QMessageBox.warning(self, "Ошибка", "Дата доставки не может быть раньше даты заказа")
+            return
+
         if self.item:
             user_id = self.item["user_id"]
             saved = dao.edit_order(self.item["id"], product_id, status_id, pickup_id, order_date, delivery_date, user_id)

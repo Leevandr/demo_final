@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '.\ui\Auth.ui'
+# Form implementation generated from reading ui file 'ui\Auth.ui'
 #
 # Created by: PyQt6 UI code generator 6.11.0
 #
@@ -42,6 +42,7 @@ class Ui_Auth(object):
         self.verticalLayout.addWidget(self.label_2, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.lineEdit_password = QtWidgets.QLineEdit(parent=Auth)
         self.lineEdit_password.setMinimumSize(QtCore.QSize(220, 28))
+        self.lineEdit_password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.lineEdit_password.setObjectName("lineEdit_password")
         self.verticalLayout.addWidget(self.lineEdit_password, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
