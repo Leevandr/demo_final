@@ -17,7 +17,7 @@ class ItemWidget(QWidget):
         discount = self.product["discount"] or 0
         price = self.product["price"] or 0
 
-        self.ui.label_category.setText(f"Артикул: {self.product.get('article', '')}")
+        self.ui.label_category.setText(f"{self.product['category_name']} |")
         self.ui.label_title.setText(f"<b>Название: {self.product['product_name']}</b>")
         self.ui.label_manufacture.setText(f"Производитель: {self.product['manufacture_name']}")
         self.ui.label_supplier.setText(f"Поставщик: {self.product['supplier_name']}")
