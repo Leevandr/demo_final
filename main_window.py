@@ -13,39 +13,11 @@ def clear_layout(layout: QLayout):
             w.deleteLater()
 
 
-STYLE = """
-QWidget {
-    font-family: "Times New Roman";
-    font-size: 12pt;
-    background-color: #FFFFFF;
-}
-QPushButton {
-    background-color: #7FFF00;
-    border: 1px solid #555;
-    border-radius: 4px;
-    padding: 4px 10px;
-}
-QPushButton:hover {
-    background-color: #00FA9A;
-}
-QLineEdit, QComboBox {
-    background-color: #FFFFFF;
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 2px 4px;
-}
-QTabBar::tab:selected {
-    background-color: #00FA9A;
-}
-"""
-
-
 class MainWindow(QWidget):
     def __init__(self, user):
         super().__init__()
         self.ui = Ui_MainForm()
         self.ui.setupUi(self)
-        self.setStyleSheet(STYLE)
         self.user = user
 
         self.postav = None
