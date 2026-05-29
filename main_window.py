@@ -65,7 +65,7 @@ class MainWindow(QWidget):
         self.ui.comboBox_sort.addItem("По убыванию кол-ва на складе")
 
     def fill_postav_combo_box(self):
-        self.postav = dao.get_all_postav()
+        self.postav = dao.get_all_suppliers()
         self.ui.comboBox_postav.addItem("Все")
         self.ui.comboBox_postav.addItems(p["supplier_name"] for p in self.postav)
 
