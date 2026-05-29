@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QFrame
 
 from gen.order_item_window import Ui_OrderItemWidget
 
@@ -8,11 +8,8 @@ class OrderItemWidget(QWidget):
         super().__init__()
         self.ui = Ui_OrderItemWidget()
         self.ui.setupUi(self)
-        self.setObjectName("OrderItemWidget")
-        self.setAutoFillBackground(True)
         self.order = order
         self._fill()
-        self._apply_style(selected=False)
 
     def _fill(self):
         self.ui.label_articul.setText(f"Артикул: {self.order.get('article', '')}")
@@ -24,32 +21,10 @@ class OrderItemWidget(QWidget):
             f"Дата доставки:\n{delivery}" if delivery else "Дата доставки:\n—"
         )
 
-    def _apply_style(self, selected: bool):
-        outer = "2px solid #8bbfff" if selected else "1px solid #808080"
-        self.setStyleSheet(f"""
-            #OrderItemWidget {{
-                border: {outer};
-                border-radius: 6px;
-                background-color: #ffffff;
-                margin: 3px;
-                padding: 4px;
-            }}
-            #OrderItemWidget QLabel {{
-                border: none;
-                background: transparent;
-                color: #000000;
-            }}
-            QLabel#label_delivery_date {{
-                border: 1px solid #808080;
-                border-radius: 4px;
-                background-color: #ffffff;
-                padding: 8px;
-                color: #000000;
-            }}
-        """)
-
     def set_selected(self, selected: bool):
-        self._apply_style(selected)
+        style = "border: 2px solid #8bbfff;" if selected else "border: 1px solid #b0b0b0;"
+        self.ui.frame_left.setStyleSheet(style)
+        self.ui.frame_right.setStyleSheet(style)
 
     def mousePressEvent(self, a0):
         main = self.window()
