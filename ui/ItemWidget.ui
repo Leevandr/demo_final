@@ -13,6 +13,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#ItemWidget {
+    border: 1px solid #b0b0b0;
+    border-radius: 6px;
+    background-color: #ffffff;
+}
+#ItemWidget QLabel {
+    border: none;
+    background: transparent;
+}</string>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">

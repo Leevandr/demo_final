@@ -13,6 +13,7 @@ class Ui_OrderItemWidget(object):
     def setupUi(self, OrderItemWidget):
         OrderItemWidget.setObjectName("OrderItemWidget")
         OrderItemWidget.resize(730, 142)
+        OrderItemWidget.setStyleSheet("#OrderItemWidget {\n    border: 1px solid #b0b0b0;\n    border-radius: 6px;\n    background-color: #ffffff;\n}\n#OrderItemWidget QLabel {\n    border: none;\n    background: transparent;\n}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(OrderItemWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
