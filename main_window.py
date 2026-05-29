@@ -9,7 +9,8 @@ from order_item_widget import OrderItemWidget
 
 def clear_layout(layout: QLayout):
     while layout.count():
-        w = layout.takeAt(0).widget()
+        item = layout.takeAt(0)
+        w = item.widget()
         if w:
             w.deleteLater()
 
@@ -79,6 +80,7 @@ class MainWindow(QWidget):
         products = dao.get_all_products(search, sort, postav)
         for product in products:
             self.ui.verticalLayout_4.addWidget(ItemWidget(product))
+        self.ui.verticalLayout_4.addStretch()
         self.selected_widget = None
 
     def select_widget(self, widget):
@@ -92,6 +94,7 @@ class MainWindow(QWidget):
         orders = dao.get_all_orders()
         for order in orders:
             self.ui.verticalLayout_9.addWidget(OrderItemWidget(order))
+        self.ui.verticalLayout_9.addStretch()
         self.selected_order_widget = None
 
     def select_order_widget(self, widget):
