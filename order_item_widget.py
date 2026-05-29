@@ -22,9 +22,12 @@ class OrderItemWidget(QWidget):
         )
 
     def set_selected(self, selected: bool):
-        style = "border: 2px solid #8bbfff;" if selected else "border: 1px solid #b0b0b0;"
-        self.ui.frame_left.setStyleSheet(style)
-        self.ui.frame_right.setStyleSheet(style)
+        if selected:
+            self.ui.frame_left.setStyleSheet("QFrame#frame_left { border: 2px solid #8bbfff; }")
+            self.ui.frame_right.setStyleSheet("QFrame#frame_right { border: 2px solid #8bbfff; }")
+        else:
+            self.ui.frame_left.setStyleSheet("")
+            self.ui.frame_right.setStyleSheet("")
 
     def mousePressEvent(self, a0):
         main = self.window()

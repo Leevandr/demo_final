@@ -19,16 +19,12 @@ class Ui_OrderItemWidget(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-
-        # Левый фрейм с информацией
         self.frame_left = QtWidgets.QFrame(parent=OrderItemWidget)
-        self.frame_left.setObjectName("frame_left")
         self.frame_left.setFrameShape(QtWidgets.QFrame.Shape.Box)
         self.frame_left.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
-        self.frame_left.setLineWidth(1)
+        self.frame_left.setObjectName("frame_left")
         self.left_layout = QtWidgets.QVBoxLayout(self.frame_left)
         self.left_layout.setObjectName("left_layout")
-
         self.label_articul = QtWidgets.QLabel(parent=self.frame_left)
         font = QtGui.QFont()
         font.setBold(True)
@@ -36,40 +32,29 @@ class Ui_OrderItemWidget(object):
         self.label_articul.setFont(font)
         self.label_articul.setObjectName("label_articul")
         self.left_layout.addWidget(self.label_articul)
-
         self.label_status = QtWidgets.QLabel(parent=self.frame_left)
         self.label_status.setObjectName("label_status")
         self.left_layout.addWidget(self.label_status)
-
         self.label_pick_point = QtWidgets.QLabel(parent=self.frame_left)
         self.label_pick_point.setObjectName("label_pick_point")
         self.left_layout.addWidget(self.label_pick_point)
-
         self.label_order_date = QtWidgets.QLabel(parent=self.frame_left)
         self.label_order_date.setObjectName("label_order_date")
         self.left_layout.addWidget(self.label_order_date)
-
         self.horizontalLayout_2.addWidget(self.frame_left)
-
-        # Правый фрейм с датой доставки
         self.frame_right = QtWidgets.QFrame(parent=OrderItemWidget)
-        self.frame_right.setObjectName("frame_right")
+        self.frame_right.setMaximumSize(QtCore.QSize(200, 16777215))
         self.frame_right.setFrameShape(QtWidgets.QFrame.Shape.Box)
         self.frame_right.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
-        self.frame_right.setLineWidth(1)
-        self.frame_right.setMaximumWidth(200)
+        self.frame_right.setObjectName("frame_right")
         self.right_layout = QtWidgets.QVBoxLayout(self.frame_right)
         self.right_layout.setObjectName("right_layout")
-        self.right_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-
         self.label_delivery_date = QtWidgets.QLabel(parent=self.frame_right)
         self.label_delivery_date.setMaximumSize(QtCore.QSize(170, 16777215))
         self.label_delivery_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_delivery_date.setObjectName("label_delivery_date")
         self.right_layout.addWidget(self.label_delivery_date)
-
         self.horizontalLayout_2.addWidget(self.frame_right)
-
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout.addLayout(self.verticalLayout)
 
