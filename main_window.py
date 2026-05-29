@@ -78,9 +78,8 @@ class MainWindow(QWidget):
         if self.selected_widget:
             self.selected_widget.setStyleSheet(self.selected_widget.base_style)
         self.selected_widget = widget
-        from item_widget import _build_style
         self.selected_widget.setStyleSheet(
-            _build_style(self.selected_widget._bg_color, border_color="#8bbfff", border_width=2)
+            (self.selected_widget.base_style or "") + "; border: 2px solid #8bbfff; border-radius: 6px;"
         )
 
     def load_orders(self):
@@ -92,9 +91,9 @@ class MainWindow(QWidget):
 
     def select_order_widget(self, widget):
         if self.selected_order_widget:
-            self.selected_order_widget.set_selected(False)
+            self.selected_order_widget.setStyleSheet("")
         self.selected_order_widget = widget
-        self.selected_order_widget.set_selected(True)
+        self.selected_order_widget.setStyleSheet("border: 2px solid #8bbfff; border-radius: 6px;")
 
     def add_product(self):
         from product_dialog import ProductDialog

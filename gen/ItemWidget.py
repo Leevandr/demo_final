@@ -13,7 +13,6 @@ class Ui_ItemWidget(object):
     def setupUi(self, ItemWidget):
         ItemWidget.setObjectName("ItemWidget")
         ItemWidget.resize(677, 172)
-        ItemWidget.setStyleSheet("#ItemWidget {\n    border: 1px solid #b0b0b0;\n    border-radius: 6px;\n    background-color: #ffffff;\n}\n#ItemWidget QLabel {\n    border: none;\n    background: transparent;\n}")
         self.horizontalLayout = QtWidgets.QHBoxLayout(ItemWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
