@@ -2,19 +2,27 @@ from PyQt6.QtWidgets import QWidget
 
 from gen.order_item_window import Ui_OrderItemWidget
 
-CARD_STYLE = """
-    QWidget#OrderItemWidget {
+_STYLE_NORMAL = """
+    #OrderItemWidget {
         border: 1px solid #b0b0b0;
         border-radius: 6px;
         background-color: #ffffff;
     }
+    #OrderItemWidget QLabel {
+        border: none;
+        background: transparent;
+    }
 """
 
-CARD_SELECTED = """
-    QWidget#OrderItemWidget {
+_STYLE_SELECTED = """
+    #OrderItemWidget {
         border: 2px solid #8bbfff;
         border-radius: 6px;
         background-color: #ffffff;
+    }
+    #OrderItemWidget QLabel {
+        border: none;
+        background: transparent;
     }
 """
 
@@ -25,9 +33,10 @@ class OrderItemWidget(QWidget):
         self.ui = Ui_OrderItemWidget()
         self.ui.setupUi(self)
         self.setObjectName("OrderItemWidget")
+        self.setAutoFillBackground(True)
         self.order = order
         self._fill()
-        self.setStyleSheet(CARD_STYLE)
+        self.setStyleSheet(_STYLE_NORMAL)
 
     def _fill(self):
         article = self.order.get("article", "")
@@ -39,6 +48,9 @@ class OrderItemWidget(QWidget):
         self.ui.label_delivery_date.setText(
             f"Дата доставки:\n{delivery}" if delivery else "Дата доставки:\n—"
         )
+
+    def set_selected(self, selected: bool):
+        self.setStyleSheet(_STYLE_SELECTED if selected else _STYLE_NORMAL)
 
     def mousePressEvent(self, a0):
         main = self.window()

@@ -78,19 +78,10 @@ class MainWindow(QWidget):
         if self.selected_widget:
             self.selected_widget.setStyleSheet(self.selected_widget.base_style)
         self.selected_widget = widget
-        from item_widget import CARD_BASE
-        disc = self.selected_widget.product.get("discount") or 0
-        qty = self.selected_widget.product.get("quantity", 1)
-        if disc > 15:
-            bg = "background-color: #2E8B57;"
-        elif qty == 0:
-            bg = "background-color: #ADD8E6;"
-        else:
-            bg = "background-color: #ffffff;"
-        selected = CARD_BASE.format(bg=bg).replace(
-            "border: 1px solid #b0b0b0;", "border: 2px solid #8bbfff;"
+        from item_widget import _build_style
+        self.selected_widget.setStyleSheet(
+            _build_style(self.selected_widget._bg_color, border_color="#8bbfff", border_width=2)
         )
-        self.selected_widget.setStyleSheet(selected)
 
     def load_orders(self):
         clear_layout(self.ui.verticalLayout_9)
@@ -100,11 +91,10 @@ class MainWindow(QWidget):
         self.selected_order_widget = None
 
     def select_order_widget(self, widget):
-        from order_item_widget import CARD_STYLE, CARD_SELECTED
         if self.selected_order_widget:
-            self.selected_order_widget.setStyleSheet(CARD_STYLE)
+            self.selected_order_widget.set_selected(False)
         self.selected_order_widget = widget
-        self.selected_order_widget.setStyleSheet(CARD_SELECTED)
+        self.selected_order_widget.set_selected(True)
 
     def add_product(self):
         from product_dialog import ProductDialog

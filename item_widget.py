@@ -3,13 +3,19 @@ from PyQt6.QtWidgets import QWidget
 
 from gen.ItemWidget import Ui_ItemWidget
 
-CARD_BASE = """
-    QWidget#ItemWidget {{
-        border: 1px solid #b0b0b0;
-        border-radius: 6px;
-        {bg}
-    }}
-"""
+
+def _build_style(bg_color: str, border_color: str = "#b0b0b0", border_width: int = 1) -> str:
+    return f"""
+        #ItemWidget {{
+            border: {border_width}px solid {border_color};
+            border-radius: 6px;
+            background-color: {bg_color};
+        }}
+        #ItemWidget QLabel {{
+            border: none;
+            background: transparent;
+        }}
+    """
 
 
 class ItemWidget(QWidget):
@@ -18,8 +24,9 @@ class ItemWidget(QWidget):
         self.ui = Ui_ItemWidget()
         self.ui.setupUi(self)
         self.setObjectName("ItemWidget")
+        self.setAutoFillBackground(True)
         self.product = product
-        self.base_style = ""
+        self._bg_color = "#ffffff"
         self.fill_items()
 
     def fill_items(self):
@@ -46,14 +53,13 @@ class ItemWidget(QWidget):
             self.ui.label_price.setText(f"Цена: {price:.2f} Руб.")
 
         if discount > 15:
-            bg = "background-color: #2E8B57;"
+            self._bg_color = "#2E8B57"
         elif self.product["quantity"] == 0:
-            bg = "background-color: #ADD8E6;"
+            self._bg_color = "#ADD8E6"
         else:
-            bg = "background-color: #ffffff;"
+            self._bg_color = "#ffffff"
 
-        self.base_style = CARD_BASE.format(bg=bg)
-        self.setStyleSheet(self.base_style)
+        self.setStyleSheet(_build_style(self._bg_color))
 
         if self.product["image_path"]:
             path = "image\\" + self.product["image_path"]
@@ -61,6 +67,10 @@ class ItemWidget(QWidget):
         else:
             pix = QPixmap("image\\default.png")
         self.ui.label_image.setPixmap(pix.scaled(150, 150))
+
+    @property
+    def base_style(self):
+        return _build_style(self._bg_color)
 
     def mousePressEvent(self, a0):
         main = self.window()
