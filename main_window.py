@@ -98,9 +98,9 @@ class MainWindow(QWidget):
 
     def select_order_widget(self, widget):
         if self.selected_order_widget:
-            self.selected_order_widget.setStyleSheet("")
+            self.selected_order_widget.set_selected(False)
         self.selected_order_widget = widget
-        self.selected_order_widget.setStyleSheet("border: 2px solid #8bbfff; border-radius: 6px;")
+        self.selected_order_widget.set_selected(True)
 
     def _dialog_open(self):
         return self.product_dialog is not None and self.product_dialog.isVisible()
