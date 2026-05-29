@@ -25,22 +25,26 @@ class OrderItemWidget(QWidget):
         )
 
     def _apply_style(self, selected: bool):
-        border = "2px solid #8bbfff" if selected else "1px solid #b0b0b0"
+        outer = "2px solid #8bbfff" if selected else "1px solid #808080"
         self.setStyleSheet(f"""
             #OrderItemWidget {{
-                border: {border};
+                border: {outer};
                 border-radius: 6px;
-                background-color: white;
+                background-color: #ffffff;
+                margin: 3px;
+                padding: 4px;
             }}
             #OrderItemWidget QLabel {{
                 border: none;
                 background: transparent;
+                color: #000000;
             }}
             QLabel#label_delivery_date {{
-                border: 1px solid #b0b0b0;
+                border: 1px solid #808080;
                 border-radius: 4px;
-                background-color: white;
-                padding: 6px;
+                background-color: #ffffff;
+                padding: 8px;
+                color: #000000;
             }}
         """)
 
