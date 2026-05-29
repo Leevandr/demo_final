@@ -13,8 +13,7 @@ class OrderItemWidget(QWidget):
 
     def _fill(self):
         from PyQt6.QtGui import QFont
-        font = QFont()
-        font.setPointSize(11)
+        font = QFont("Times New Roman", 11)
 
         self.ui.label_articul.setText(f"Артикул: {self.order.get('article', '')}")
         self.ui.label_status.setText(f"Статус: {self.order.get('status_name', '')}")
@@ -41,3 +40,11 @@ class OrderItemWidget(QWidget):
         main = self.window()
         if hasattr(main, "select_order_widget"):
             main.select_order_widget(self)
+
+    def mouseDoubleClickEvent(self, event):
+        # двойной клик открывает диалог редактирования заказа
+        main = self.window()
+        if hasattr(main, "select_order_widget"):
+            main.select_order_widget(self)
+        if hasattr(main, "edit_order"):
+            main.edit_order()

@@ -50,7 +50,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`categories`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`categories` (
-  `category_id` INT NOT NULL,
+  `category_id` INT NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NULL,
   PRIMARY KEY (`category_id`))
 ENGINE = InnoDB;
@@ -60,7 +60,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`manufactures`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`manufactures` (
-  `manufacture_id` INT NOT NULL,
+  `manufacture_id` INT NOT NULL AUTO_INCREMENT,
   `manufacture_name` VARCHAR(45) NULL,
   PRIMARY KEY (`manufacture_id`))
 ENGINE = InnoDB;
@@ -70,7 +70,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`suppliers`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`suppliers` (
-  `supplier_id` INT NOT NULL,
+  `supplier_id` INT NOT NULL AUTO_INCREMENT,
   `supplier_name` VARCHAR(45) NULL,
   PRIMARY KEY (`supplier_id`))
 ENGINE = InnoDB;
@@ -90,7 +90,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`products` (
-  `product_id` INT NOT NULL,
+  `product_id` INT NOT NULL AUTO_INCREMENT,
   `article` VARCHAR(45) NULL,
   `product_name` VARCHAR(45) NULL,
   `category_id` INT NULL,
@@ -144,7 +144,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`pickup_points`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`pickup_points` (
-  `pickup_point_id` INT NOT NULL,
+  `pickup_point_id` INT NOT NULL AUTO_INCREMENT,
   `address` VARCHAR(45) NULL,
   PRIMARY KEY (`pickup_point_id`))
 ENGINE = InnoDB;
@@ -154,7 +154,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`orders`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`orders` (
-  `order_id` INT NOT NULL AUTO_INCREMENT,
+  `order_id` INT NOT NULL AUTO_INCREMENT AUTO_INCREMENT,
   `product_id` INT NULL,
   `status_id` INT NULL,
   `pickup_point_id` INT NULL,

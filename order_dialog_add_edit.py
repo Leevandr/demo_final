@@ -5,7 +5,7 @@ from db import dao
 from gen.order_dialog import Ui_OrderDialog
 
 
-class OrderDialogCtrl(QWidget):
+class AddEditOrderDialog(QWidget):
     def __init__(self, order=None, on_save=None):
         super().__init__()
         self.ui = Ui_OrderDialog()
@@ -43,6 +43,13 @@ class OrderDialogCtrl(QWidget):
                 d = order.get(key)
                 if d:
                     date_edit.setDate(QDate(d.year, d.month, d.day))
+
+        self.ui.pushButton_save.setStyleSheet("background-color: #00FA9A; color: black;")
+
+        from PyQt6.QtWidgets import QPushButton
+        self._btn_back = QPushButton("Назад")
+        self._btn_back.clicked.connect(self.close)
+        self.ui.formLayout.addRow("", self._btn_back)
 
         self.ui.pushButton_save.clicked.connect(self._save)
 

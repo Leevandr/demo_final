@@ -37,6 +37,7 @@ class MainWindow(QWidget):
         self.fill_postav_combo_box()
         self.add_widgets_product()
         self.load_orders()
+        self._apply_styles()
 
         self.ui.comboBox_sort.currentIndexChanged.connect(self.add_widgets_product)
         self.ui.lineEdit_search.textChanged.connect(self.add_widgets_product)
@@ -50,6 +51,47 @@ class MainWindow(QWidget):
         self.ui.pushButton_add_order.clicked.connect(self.add_order)
         self.ui.pushButton_edit_order.clicked.connect(self.edit_order)
         self.ui.pushButton_delete_order.clicked.connect(self.delete_order)
+
+    def _apply_styles(self):
+        # открывать каталог первым при входе
+        self.ui.tabWidget.setCurrentIndex(0)
+
+        # дополнительный фон верхней панели
+        # создаём контейнер с цветом фона и переносим в него все виджеты шапки
+        from PyQt6.QtWidgets import QWidget, QHBoxLayout
+        header = QWidget()
+        header.setStyleSheet("background-color: #7FFF00;")
+        hl = QHBoxLayout(header)
+        hl.setContentsMargins(4, 4, 4, 4)
+        hl.setSpacing(self.ui.horizontalLayout.spacing())
+
+        items = []
+        while self.ui.horizontalLayout.count():
+            items.append(self.ui.horizontalLayout.takeAt(0))
+        for item in items:
+            w = item.widget()
+            if w is self.ui.label_fio:
+                hl.addWidget(w, 0, Qt.AlignmentFlag.AlignVCenter)
+            elif w is not None:
+                hl.addWidget(w)
+
+        for i in range(self.ui.verticalLayout.count()):
+            if self.ui.verticalLayout.itemAt(i).layout() is self.ui.horizontalLayout:
+                self.ui.verticalLayout.takeAt(i)
+                self.ui.verticalLayout.insertWidget(i, header)
+                break
+
+        # лейблы прозрачные — фон контейнера просвечивает сквозь них
+        self.ui.label_for_logo.setStyleSheet("background: transparent;")
+        self.ui.label_fio.setStyleSheet("background: transparent; color: black;")
+        self.ui.pushButton_logout.setStyleSheet(
+            "background-color: #00FA9A; color: black; border: 1px solid #333; border-radius: 3px; padding: 4px 12px;"
+        )
+
+        # акцент на кнопках целевого действия
+        self.ui.pushButton_add.setStyleSheet("background-color: #00FA9A; color: black;")
+        self.ui.pushButton_add_order.setStyleSheet("background-color: #00FA9A; color: black;")
+
 
     def fill_name(self):
         self.ui.label_fio.setText(self.user.get("full_name", ""))
@@ -133,6 +175,7 @@ class MainWindow(QWidget):
             QMessageBox.warning(self, "Предупреждение", "Выберите товар для удаления.")
             return
         product_id = self.selected_widget.product["product_id"]
+        # нельзя удалить товар если он привязан к заказу
         if dao.product_in_orders(product_id):
             QMessageBox.warning(self, "Ошибка", "Товар присутствует в заказе, удаление невозможно.")
             return
@@ -145,16 +188,16 @@ class MainWindow(QWidget):
             self.add_widgets_product()
 
     def add_order(self):
-        from order_dialog_ctrl import OrderDialogCtrl
-        self.order_dialog = OrderDialogCtrl(on_save=self.load_orders)
+        from order_dialog_add_edit import AddEditOrderDialog
+        self.order_dialog = AddEditOrderDialog(on_save=self.load_orders)
         self.order_dialog.show()
 
     def edit_order(self):
         if not self.selected_order_widget:
             QMessageBox.warning(self, "Предупреждение", "Выберите заказ.")
             return
-        from order_dialog_ctrl import OrderDialogCtrl
-        self.order_dialog = OrderDialogCtrl(
+        from order_dialog_add_edit import AddEditOrderDialog
+        self.order_dialog = AddEditOrderDialog(
             order=self.selected_order_widget.order,
             on_save=self.load_orders
         )
@@ -179,6 +222,7 @@ class MainWindow(QWidget):
         self.close()
 
     def visibles(self):
+        # скрываем кнопки и вкладки в зависимости от роли пользователя
         user_role = self.user.get("role_id")
         if user_role in (2, 3, 4):
             self.ui.pushButton_del.setVisible(False)

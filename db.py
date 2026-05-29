@@ -2,6 +2,7 @@ import pymysql
 from pymysql.cursors import DictCursor
 
 
+# слой доступа к данным - все запросы к базе данных собраны здесь
 class Database:
     def __init__(self):
         self.conn = pymysql.connect(
@@ -56,6 +57,7 @@ class Database:
         return cur.fetchall()
 
     def get_all_products(self, search="", sort="Без сортировки", supplier="Все"):
+        # поиск по шести полям с опциональным фильтром по поставщику и сортировкой
         sql = """
             SELECT p.product_id, p.article, p.category_id, p.manufacture_id,
                    p.supplier_id, p.unit_id, category_name, product_name,
@@ -111,6 +113,7 @@ class Database:
             cur.execute("DELETE FROM products WHERE product_id=%s", (product_id,))
         self.conn.commit()
 
+    # проверяет используется ли товар в заказах перед удалением
     def product_in_orders(self, product_id):
         with self.cursor() as cur:
             cur.execute("SELECT COUNT(*) as cnt FROM orders WHERE product_id=%s", (product_id,))

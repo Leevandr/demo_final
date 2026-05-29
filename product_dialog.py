@@ -1,5 +1,5 @@
 import os
-import shutil
+
 
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QWidget, QMessageBox, QFileDialog
@@ -27,6 +27,7 @@ class ProductDialog(QWidget):
             self.ui.unitComboBox.addItem(u["unit_name"], u["unit_id"])
 
         if product:
+            # режим редактирования — заполняем поля текущими значениями
             self.setWindowTitle("Редактирование товара")
             self.ui.articleLineEdit.setText(str(product.get("article") or ""))
             self.ui.product_nameLineEdit.setText(str(product.get("product_name") or ""))
@@ -45,6 +46,13 @@ class ProductDialog(QWidget):
                     combo.setCurrentIndex(idx)
             if product.get("image_path"):
                 self.ui.image_pathLineEdit.setText(product["image_path"])
+
+        self.ui.pushButton_save.setStyleSheet("background-color: #00FA9A; color: black;")
+
+        from PyQt6.QtWidgets import QPushButton
+        self._btn_back = QPushButton("Назад")
+        self._btn_back.clicked.connect(self.close)
+        self.ui.formLayout.addRow("", self._btn_back)
 
         self.ui.pushButton_image.clicked.connect(self._choose_image)
         self.ui.pushButton_save.clicked.connect(self._save)
@@ -75,6 +83,7 @@ class ProductDialog(QWidget):
         image_path   = self.ui.image_pathLineEdit.text().strip() or None
 
         if self._chosen_image_path:
+            # копируем изображение в папку приложения и сохраняем только имя файла
             filename = os.path.basename(self._chosen_image_path)
             dest = os.path.join("image", filename)
             os.makedirs("image", exist_ok=True)

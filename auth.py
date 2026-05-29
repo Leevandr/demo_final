@@ -19,6 +19,7 @@ class AuthWindow(QWidget):
         self.ui.label_for_logo.setPixmap(QPixmap("image/logo/logo.png").scaled(
             80, 60, Qt.AspectRatioMode.KeepAspectRatio
         ))
+        self.ui.pushButton.setStyleSheet("background-color: #00FA9A; color: black;")
         self.ui.pushButton.clicked.connect(self.auth)
         self.ui.pushButton_2.clicked.connect(self.guest)
 
@@ -38,6 +39,7 @@ class AuthWindow(QWidget):
                 QMessageBox.warning(self, "Ошибка", "Пользователь с указанными данными не найден.")
 
     def guest(self):
+        # вход без авторизации с минимальными правами
         self.main_window = MainWindow(user={"role_id": 4, "full_name": "Гость"})
         self.main_window.show()
         self.close()
