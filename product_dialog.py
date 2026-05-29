@@ -1,6 +1,7 @@
 import os
 import shutil
 
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QWidget, QMessageBox, QFileDialog
 
 from db import dao
@@ -16,15 +17,6 @@ class ProductDialog(QWidget):
         self.on_save = on_save
         self._chosen_image_path = None
 
-        self._fill_combos()
-        if product:
-            self.setWindowTitle("Редактирование товара")
-            self._fill_fields()
-
-        self.ui.pushButton_image.clicked.connect(self._choose_image)
-        self.ui.pushButton_save.clicked.connect(self._save)
-
-    def _fill_combos(self):
         for cat in dao.get_all_categories():
             self.ui.categoryComboBox.addItem(cat["category_name"], cat["category_id"])
         for m in dao.get_all_manufactures():
@@ -34,30 +26,28 @@ class ProductDialog(QWidget):
         for u in dao.get_all_units():
             self.ui.unitComboBox.addItem(u["unit_name"], u["unit_id"])
 
-    def _fill_fields(self):
-        p = self.product
-        self.ui.articleLineEdit.setText(str(p.get("article") or ""))
-        self.ui.product_nameLineEdit.setText(str(p.get("product_name") or ""))
-        self.ui.descriptionLineEdit.setText(str(p.get("descrip") or ""))
-        self.ui.priceDoubleSpinBox.setValue(float(p.get("price") or 0))
-        self.ui.quantityDoubleSpinBox.setValue(float(p.get("quantity") or 0))
-        self.ui.discountDoubleSpinBox.setValue(float(p.get("discount") or 0))
+        if product:
+            self.setWindowTitle("Редактирование товара")
+            self.ui.articleLineEdit.setText(str(product.get("article") or ""))
+            self.ui.product_nameLineEdit.setText(str(product.get("product_name") or ""))
+            self.ui.descriptionLineEdit.setText(str(product.get("descrip") or ""))
+            self.ui.priceDoubleSpinBox.setValue(float(product.get("price") or 0))
+            self.ui.quantityDoubleSpinBox.setValue(float(product.get("quantity") or 0))
+            self.ui.discountDoubleSpinBox.setValue(float(product.get("discount") or 0))
+            for combo, key in [
+                (self.ui.categoryComboBox,    "category_id"),
+                (self.ui.manufacturerComboBox,"manufacture_id"),
+                (self.ui.supplierComboBox,    "supplier_id"),
+                (self.ui.unitComboBox,        "unit_id"),
+            ]:
+                idx = combo.findData(product.get(key))
+                if idx >= 0:
+                    combo.setCurrentIndex(idx)
+            if product.get("image_path"):
+                self.ui.image_pathLineEdit.setText(product["image_path"])
 
-        idx = self.ui.categoryComboBox.findData(p.get("category_id"))
-        if idx >= 0:
-            self.ui.categoryComboBox.setCurrentIndex(idx)
-        idx = self.ui.manufacturerComboBox.findData(p.get("manufacture_id"))
-        if idx >= 0:
-            self.ui.manufacturerComboBox.setCurrentIndex(idx)
-        idx = self.ui.supplierComboBox.findData(p.get("supplier_id"))
-        if idx >= 0:
-            self.ui.supplierComboBox.setCurrentIndex(idx)
-        idx = self.ui.unitComboBox.findData(p.get("unit_id"))
-        if idx >= 0:
-            self.ui.unitComboBox.setCurrentIndex(idx)
-
-        if p.get("image_path"):
-            self.ui.image_pathLineEdit.setText(p["image_path"])
+        self.ui.pushButton_image.clicked.connect(self._choose_image)
+        self.ui.pushButton_save.clicked.connect(self._save)
 
     def _choose_image(self):
         path, _ = QFileDialog.getOpenFileName(
@@ -69,29 +59,26 @@ class ProductDialog(QWidget):
 
     def _save(self):
         name = self.ui.product_nameLineEdit.text().strip()
-        article = self.ui.articleLineEdit.text().strip()
         if not name:
             QMessageBox.warning(self, "Ошибка", "Не удалось сохранить данные. Проверьте заполнение полей.")
             return
 
-        category_id = self.ui.categoryComboBox.currentData()
+        article      = self.ui.articleLineEdit.text().strip()
+        category_id  = self.ui.categoryComboBox.currentData()
         manufacture_id = self.ui.manufacturerComboBox.currentData()
-        supplier_id = self.ui.supplierComboBox.currentData()
-        unit_id = self.ui.unitComboBox.currentData()
-        descrip = self.ui.descriptionLineEdit.text().strip()
-        price = self.ui.priceDoubleSpinBox.value()
-        quantity = int(self.ui.quantityDoubleSpinBox.value())
-        discount = self.ui.discountDoubleSpinBox.value()
+        supplier_id  = self.ui.supplierComboBox.currentData()
+        unit_id      = self.ui.unitComboBox.currentData()
+        descrip      = self.ui.descriptionLineEdit.text().strip()
+        price        = self.ui.priceDoubleSpinBox.value()
+        quantity     = int(self.ui.quantityDoubleSpinBox.value())
+        discount     = self.ui.discountDoubleSpinBox.value()
+        image_path   = self.ui.image_pathLineEdit.text().strip() or None
 
-        image_path = self.ui.image_pathLineEdit.text().strip() or None
         if self._chosen_image_path:
-            from PyQt6.QtGui import QPixmap
             filename = os.path.basename(self._chosen_image_path)
             dest = os.path.join("image", filename)
-            if not os.path.exists("image"):
-                os.makedirs("image")
-            pix = QPixmap(self._chosen_image_path).scaled(300, 200)
-            pix.save(dest)
+            os.makedirs("image", exist_ok=True)
+            QPixmap(self._chosen_image_path).scaled(300, 200).save(dest)
             if self.product and self.product.get("image_path"):
                 old = os.path.join("image", self.product["image_path"])
                 if os.path.exists(old) and os.path.abspath(old) != os.path.abspath(dest):
@@ -100,15 +87,12 @@ class ProductDialog(QWidget):
 
         try:
             if self.product:
-                dao.update_product(
-                    self.product["product_id"], article, name, category_id, descrip,
-                    manufacture_id, supplier_id, price, unit_id, quantity, discount, image_path
-                )
+                dao.update_product(self.product["product_id"], article, name, category_id,
+                                   descrip, manufacture_id, supplier_id, price,
+                                   unit_id, quantity, discount, image_path)
             else:
-                dao.add_product(
-                    article, name, category_id, descrip, manufacture_id,
-                    supplier_id, price, unit_id, quantity, discount, image_path
-                )
+                dao.add_product(article, name, category_id, descrip, manufacture_id,
+                                supplier_id, price, unit_id, quantity, discount, image_path)
             if self.on_save:
                 self.on_save()
             self.close()

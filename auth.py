@@ -14,6 +14,11 @@ class AuthWindow(QWidget):
         self.main_window = None
 
     def conn(self):
+        from PyQt6.QtCore import Qt
+        from PyQt6.QtGui import QPixmap
+        self.ui.label_for_logo.setPixmap(QPixmap("image/logo/logo.png").scaled(
+            80, 60, Qt.AspectRatioMode.KeepAspectRatio
+        ))
         self.ui.pushButton.clicked.connect(self.auth)
         self.ui.pushButton_2.clicked.connect(self.guest)
 

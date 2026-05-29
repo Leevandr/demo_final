@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QLayout, QMessageBox
 
 from db import dao
@@ -51,6 +52,12 @@ class MainWindow(QWidget):
 
     def fill_name(self):
         self.ui.label_fio.setText(self.user.get("full_name", ""))
+        from PyQt6.QtGui import QPixmap
+        self.ui.label_for_logo.setPixmap(QPixmap("image/logo/logo.png").scaled(
+            self.ui.label_for_logo.width() or 80,
+            self.ui.label_for_logo.height() or 60,
+            Qt.AspectRatioMode.KeepAspectRatio
+        ))
 
     def fill_sort_combo_box(self):
         self.ui.comboBox_sort.addItem("Без сортировки")

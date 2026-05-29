@@ -13,18 +13,8 @@ class OrderDialogCtrl(QWidget):
         self.order = order
         self.on_save = on_save
 
-        self._fill_combos()
-        if order:
-            self.setWindowTitle("Редактирование заказа")
-            self._fill_fields()
-
-        self.ui.pushButton_save.clicked.connect(self._save)
-
-    def _fill_combos(self):
         for p in dao.get_all_products():
-            self.ui.productComboBox.addItem(
-                f"{p['article']} — {p['product_name']}", p["product_id"]
-            )
+            self.ui.productComboBox.addItem(f"{p['article']} — {p['product_name']}", p["product_id"])
         for s in dao.get_all_statuses():
             self.ui.statusComboBox.addItem(s["status_name"], s["status_id"])
         for pp in dao.get_all_pickup_points():
@@ -35,42 +25,38 @@ class OrderDialogCtrl(QWidget):
         self.ui.orderdateDateEdit.setDate(QDate.currentDate())
         self.ui.deliverydateDateEdit.setDate(QDate.currentDate())
 
-    def _fill_fields(self):
-        o = self.order
-        idx = self.ui.productComboBox.findData(o.get("product_id"))
-        if idx >= 0:
-            self.ui.productComboBox.setCurrentIndex(idx)
-        idx = self.ui.statusComboBox.findData(o.get("status_id"))
-        if idx >= 0:
-            self.ui.statusComboBox.setCurrentIndex(idx)
-        idx = self.ui.pickup_pointComboBox.findData(o.get("pickup_point_id"))
-        if idx >= 0:
-            self.ui.pickup_pointComboBox.setCurrentIndex(idx)
-        idx = self.ui.usersComboBox.findData(o.get("user_id"))
-        if idx >= 0:
-            self.ui.usersComboBox.setCurrentIndex(idx)
+        if order:
+            self.setWindowTitle("Редактирование заказа")
+            for combo, key in [
+                (self.ui.productComboBox,      "product_id"),
+                (self.ui.statusComboBox,       "status_id"),
+                (self.ui.pickup_pointComboBox, "pickup_point_id"),
+                (self.ui.usersComboBox,        "user_id"),
+            ]:
+                idx = combo.findData(order.get(key))
+                if idx >= 0:
+                    combo.setCurrentIndex(idx)
+            for date_edit, key in [
+                (self.ui.orderdateDateEdit,    "order_date"),
+                (self.ui.deliverydateDateEdit, "delivery_date"),
+            ]:
+                d = order.get(key)
+                if d:
+                    date_edit.setDate(QDate(d.year, d.month, d.day))
 
-        if o.get("order_date"):
-            d = o["order_date"]
-            self.ui.orderdateDateEdit.setDate(QDate(d.year, d.month, d.day))
-        if o.get("delivery_date"):
-            d = o["delivery_date"]
-            self.ui.deliverydateDateEdit.setDate(QDate(d.year, d.month, d.day))
+        self.ui.pushButton_save.clicked.connect(self._save)
 
     def _save(self):
-        product_id = self.ui.productComboBox.currentData()
-        status_id = self.ui.statusComboBox.currentData()
+        product_id      = self.ui.productComboBox.currentData()
+        status_id       = self.ui.statusComboBox.currentData()
         pickup_point_id = self.ui.pickup_pointComboBox.currentData()
-        user_id = self.ui.usersComboBox.currentData()
-        order_date = self.ui.orderdateDateEdit.date().toPyDate()
-        delivery_date = self.ui.deliverydateDateEdit.date().toPyDate()
-
+        user_id         = self.ui.usersComboBox.currentData()
+        order_date      = self.ui.orderdateDateEdit.date().toPyDate()
+        delivery_date   = self.ui.deliverydateDateEdit.date().toPyDate()
         try:
             if self.order:
-                dao.update_order(
-                    self.order["order_id"], product_id, status_id,
-                    pickup_point_id, order_date, delivery_date, user_id
-                )
+                dao.update_order(self.order["order_id"], product_id, status_id,
+                                 pickup_point_id, order_date, delivery_date, user_id)
             else:
                 dao.add_order(product_id, status_id, pickup_point_id, order_date, delivery_date, user_id)
             if self.on_save:
