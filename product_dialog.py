@@ -1,7 +1,6 @@
 import os
 import shutil
 
-from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QWidget, QMessageBox, QFileDialog
 
 from db import dao
@@ -86,14 +85,16 @@ class ProductDialog(QWidget):
 
         image_path = self.ui.image_pathLineEdit.text().strip() or None
         if self._chosen_image_path:
+            from PyQt6.QtGui import QPixmap
             filename = os.path.basename(self._chosen_image_path)
             dest = os.path.join("image", filename)
             if not os.path.exists("image"):
                 os.makedirs("image")
-            shutil.copy2(self._chosen_image_path, dest)
+            pix = QPixmap(self._chosen_image_path).scaled(300, 200)
+            pix.save(dest)
             if self.product and self.product.get("image_path"):
                 old = os.path.join("image", self.product["image_path"])
-                if os.path.exists(old) and old != dest:
+                if os.path.exists(old) and os.path.abspath(old) != os.path.abspath(dest):
                     os.remove(old)
             image_path = filename
 

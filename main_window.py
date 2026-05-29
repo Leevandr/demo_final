@@ -95,7 +95,13 @@ class MainWindow(QWidget):
         self.selected_order_widget = widget
         self.selected_order_widget.setStyleSheet("border: 2px solid #8bbfff; border-radius: 6px;")
 
+    def _dialog_open(self):
+        return self.product_dialog is not None and self.product_dialog.isVisible()
+
     def add_product(self):
+        if self._dialog_open():
+            self.product_dialog.activateWindow()
+            return
         from product_dialog import ProductDialog
         self.product_dialog = ProductDialog(on_save=self.add_widgets_product)
         self.product_dialog.show()
@@ -103,6 +109,9 @@ class MainWindow(QWidget):
     def edit_product(self):
         if not self.selected_widget:
             QMessageBox.warning(self, "Предупреждение", "Выберите товар для редактирования.")
+            return
+        if self._dialog_open():
+            self.product_dialog.activateWindow()
             return
         from product_dialog import ProductDialog
         self.product_dialog = ProductDialog(
