@@ -22,7 +22,7 @@ class AuthWindow(QWidget):
         passwd = self.ui.lineEdit_password.text()
 
         if not login or not passwd:
-            QMessageBox.warning(self, "Предупреждение заполните оба поля")
+            QMessageBox.warning(self, "Предупреждение", "Введите логин и пароль.")
         else:
             user = dao.login(login, passwd)
             if user:
@@ -30,9 +30,9 @@ class AuthWindow(QWidget):
                 self.main_window.show()
                 self.close()
             else:
-                QMessageBox.warning(self, "Ошибка", "Пользователь с таким логинов и паролем не найден")
+                QMessageBox.warning(self, "Ошибка", "Пользователь с указанными данными не найден.")
 
     def guest(self):
-        self.main_window = MainWindow(user={"role_id": 4, "full_name": "Выполнен вход в качестве гостя"})
+        self.main_window = MainWindow(user={"role_id": 4, "full_name": "Гость"})
         self.main_window.show()
         self.close()
