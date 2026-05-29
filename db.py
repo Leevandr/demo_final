@@ -5,8 +5,10 @@ from pymysql.cursors import DictCursor
 class Database:
     def __init__(self):
         self.conn = pymysql.connect(
-            host="localhost", database="mydb",
-            user="root", password="root",
+            host="localhost",
+            database="mydb",
+            user="root",
+            password="root",
             cursorclass=DictCursor
         )
 
