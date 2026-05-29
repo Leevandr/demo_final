@@ -83,11 +83,9 @@ class MainWindow(QWidget):
 
     def select_widget(self, widget):
         if self.selected_widget:
-            self.selected_widget.setStyleSheet(self.selected_widget.base_style)
+            self.selected_widget.set_selected(False)
         self.selected_widget = widget
-        self.selected_widget.setStyleSheet(
-            (self.selected_widget.base_style or "") + "; border: 2px solid #8bbfff; border-radius: 6px;"
-        )
+        self.selected_widget.set_selected(True)
 
     def load_orders(self):
         clear_layout(self.ui.verticalLayout_9)

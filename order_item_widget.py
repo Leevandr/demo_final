@@ -12,6 +12,10 @@ class OrderItemWidget(QWidget):
         self._fill()
 
     def _fill(self):
+        from PyQt6.QtGui import QFont
+        font = QFont()
+        font.setPointSize(11)
+
         self.ui.label_articul.setText(f"Артикул: {self.order.get('article', '')}")
         self.ui.label_status.setText(f"Статус: {self.order.get('status_name', '')}")
         self.ui.label_pick_point.setText(f"Пункт выдачи: {self.order.get('address', '')}")
@@ -20,6 +24,10 @@ class OrderItemWidget(QWidget):
         self.ui.label_delivery_date.setText(
             f"Дата доставки:\n{delivery}" if delivery else "Дата доставки:\n—"
         )
+        for lbl in [self.ui.label_articul, self.ui.label_status,
+                    self.ui.label_pick_point, self.ui.label_order_date,
+                    self.ui.label_delivery_date]:
+            lbl.setFont(font)
 
     def set_selected(self, selected: bool):
         if selected:

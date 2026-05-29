@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QWidget
 
 from gen.ItemWidget import Ui_ItemWidget
@@ -10,46 +10,66 @@ class ItemWidget(QWidget):
         self.ui = Ui_ItemWidget()
         self.ui.setupUi(self)
         self.product = product
-        self.base_style = ""
+        self._selected = False
         self.fill_items()
 
     def fill_items(self):
-        self.ui.label_title.setText(f"<b>{self.product['product_name']}</b>")
-        self.ui.label_category.setText(f"{self.product['category_name']} |")
-        self.ui.label_unit.setText(f"Единица измерения: {self.product['unit_name']}")
-        self.ui.label_quantity.setText(f"Количество: {self.product['quantity']}")
-        self.ui.label_manufacture.setText(f"Производитель: {self.product['manufacture_name']}")
-        self.ui.label_description.setText(f"Описание: {self.product['descrip']}")
-        self.ui.label_supplier.setText(f"Поставщик: {self.product['supplier_name']}")
-
         discount = self.product["discount"] or 0
         price = self.product["price"] or 0
-        self.ui.label_discount.setText(f"Скидка: {discount}%")
+
+        self.ui.label_category.setText(f"Артикул: {self.product.get('article', '')}")
+        self.ui.label_title.setText(f"<b>Название: {self.product['product_name']}</b>")
+        self.ui.label_manufacture.setText(f"Производитель: {self.product['manufacture_name']}")
+        self.ui.label_supplier.setText(f"Поставщик: {self.product['supplier_name']}")
+        self.ui.label_description.setText(f"Описание: {self.product['descrip']}")
+        self.ui.label_unit.setText(f"Ед. изм.: {self.product['unit_name']}")
+        self.ui.label_quantity.setText(f"Остаток: {self.product['quantity']} шт.")
+        self.ui.label_discount.setText(f"<b>Скидка: {discount}%</b>")
 
         if discount > 0:
-            final_price = round(price * (1 - discount / 100), 2)
+            final = round(price * (1 - discount / 100), 2)
             self.ui.label_price.setText(
-                f"<s><font color='red'>{price}</font></s> {final_price} руб."
+                f"<font color='red'><s>{price:.2f}</s></font><br>{final:.2f} руб."
             )
         else:
-            self.ui.label_price.setText(f"{price} руб.")
+            self.ui.label_price.setText(f"{price:.2f} руб.")
 
+        # Фон фреймов по условиям
         if discount > 15:
-            self.base_style = "background-color: #2E8B57;"
+            bg = "background-color: #2E8B57;"
         elif self.product["quantity"] == 0:
-            self.base_style = "background-color: #ADD8E6;"
+            bg = "background-color: #ADD8E6;"
         else:
-            self.base_style = ""
+            bg = ""
+        self.ui.frame_info.setStyleSheet(bg)
+        self.ui.frame_discount.setStyleSheet(bg)
 
-        self.setStyleSheet(self.base_style)
-
-        if self.product["image_path"]:
-            path = "image\\" + self.product["image_path"]
-            pix = QPixmap(path)
-        else:
-            pix = QPixmap("image\\default.png")
+        pix = QPixmap("image\\" + self.product["image_path"]) if self.product["image_path"] else QPixmap("image\\default.png")
         self.ui.label_image.setPixmap(pix.scaled(150, 150))
 
+        # Шрифт
+        font = QFont()
+        font.setPointSize(11)
+        for lbl in [self.ui.label_category, self.ui.label_title, self.ui.label_manufacture,
+                    self.ui.label_supplier, self.ui.label_description, self.ui.label_unit,
+                    self.ui.label_quantity, self.ui.label_discount, self.ui.label_price]:
+            lbl.setFont(font)
+
+    def set_selected(self, selected: bool):
+        if selected:
+            self.ui.frame_info.setStyleSheet("QFrame#frame_info { border: 2px solid #8bbfff; }")
+            self.ui.frame_discount.setStyleSheet("QFrame#frame_discount { border: 2px solid #8bbfff; }")
+        else:
+            # Восстановить фон по условиям
+            discount = self.product["discount"] or 0
+            if discount > 15:
+                bg = "background-color: #2E8B57;"
+            elif self.product["quantity"] == 0:
+                bg = "background-color: #ADD8E6;"
+            else:
+                bg = ""
+            self.ui.frame_info.setStyleSheet(bg)
+            self.ui.frame_discount.setStyleSheet(bg)
+
     def mousePressEvent(self, a0):
-        main = self.window()
-        main.select_widget(self)
+        self.window().select_widget(self)
