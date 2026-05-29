@@ -34,9 +34,7 @@ class ItemWidget(QWidget):
         else:
             self.ui.label_price.setText(f"{price:.2f} руб.")
 
-        bg = self._bg()
-        self.ui.frame_info.setStyleSheet(bg)
-        self.ui.frame_discount.setStyleSheet(bg)
+        self.ui.frame_discount.setStyleSheet(self._bg())
 
         pix = QPixmap("image\\" + self.product["image_path"]) if self.product["image_path"] else QPixmap("image\\default.png")
         self.ui.label_image.setPixmap(pix.scaled(150, 150))
@@ -58,13 +56,12 @@ class ItemWidget(QWidget):
         return ""
 
     def set_selected(self, selected: bool):
-        bg = self._bg()
         if selected:
-            self.ui.frame_info.setStyleSheet(f"QFrame#frame_info {{ border: 2px solid #8bbfff; {bg} }}")
-            self.ui.frame_discount.setStyleSheet(f"QFrame#frame_discount {{ border: 2px solid #8bbfff; {bg} }}")
+            self.ui.frame_info.setStyleSheet("QFrame#frame_info { border: 2px solid #8bbfff; }")
+            self.ui.frame_discount.setStyleSheet(f"QFrame#frame_discount {{ border: 2px solid #8bbfff; {self._bg()} }}")
         else:
-            self.ui.frame_info.setStyleSheet(bg)
-            self.ui.frame_discount.setStyleSheet(bg)
+            self.ui.frame_info.setStyleSheet("")
+            self.ui.frame_discount.setStyleSheet(self._bg())
 
     def mousePressEvent(self, a0):
         self.window().select_widget(self)
