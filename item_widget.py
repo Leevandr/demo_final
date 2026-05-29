@@ -34,13 +34,7 @@ class ItemWidget(QWidget):
         else:
             self.ui.label_price.setText(f"{price:.2f} руб.")
 
-        # Фон фреймов по условиям
-        if discount > 15:
-            bg = "background-color: #2E8B57;"
-        elif self.product["quantity"] == 0:
-            bg = "background-color: #ADD8E6;"
-        else:
-            bg = ""
+        bg = self._bg()
         self.ui.frame_info.setStyleSheet(bg)
         self.ui.frame_discount.setStyleSheet(bg)
 
@@ -55,19 +49,20 @@ class ItemWidget(QWidget):
                     self.ui.label_quantity, self.ui.label_discount, self.ui.label_price]:
             lbl.setFont(font)
 
+    def _bg(self):
+        discount = self.product["discount"] or 0
+        if discount > 15:
+            return "background-color: #2E8B57;"
+        elif self.product["quantity"] == 0:
+            return "background-color: #ADD8E6;"
+        return ""
+
     def set_selected(self, selected: bool):
+        bg = self._bg()
         if selected:
-            self.ui.frame_info.setStyleSheet("QFrame#frame_info { border: 2px solid #8bbfff; }")
-            self.ui.frame_discount.setStyleSheet("QFrame#frame_discount { border: 2px solid #8bbfff; }")
+            self.ui.frame_info.setStyleSheet(f"QFrame#frame_info {{ border: 2px solid #8bbfff; {bg} }}")
+            self.ui.frame_discount.setStyleSheet(f"QFrame#frame_discount {{ border: 2px solid #8bbfff; {bg} }}")
         else:
-            # Восстановить фон по условиям
-            discount = self.product["discount"] or 0
-            if discount > 15:
-                bg = "background-color: #2E8B57;"
-            elif self.product["quantity"] == 0:
-                bg = "background-color: #ADD8E6;"
-            else:
-                bg = ""
             self.ui.frame_info.setStyleSheet(bg)
             self.ui.frame_discount.setStyleSheet(bg)
 
