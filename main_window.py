@@ -1,5 +1,7 @@
 
 from PyQt6.QtWidgets import QWidget, QLayout
+
+
 from db import dao
 from gen.main_window import Ui_MainForm
 from item_widget import ItemWidget
@@ -17,12 +19,16 @@ class MainWindow(QWidget):
         self.ui.setupUi(self)
         self.user = user
         print(user)
+
         self.postav = None
         self.selected_widget = None
         self.product_item_window = None
+        self.auth_window = None
         self.__conn()
 
     def __conn(self):
+        self.visibles()
+
         self.fill_name()
         self.fill_sort_combo_box()
         self.fill_postav_combo_box()
@@ -31,6 +37,8 @@ class MainWindow(QWidget):
         self.ui.comboBox_sort.currentIndexChanged.connect(self.add_widgets_product)
         self.ui.lineEdit_search.textChanged.connect(self.add_widgets_product)
         self.ui.comboBox_postav.currentIndexChanged.connect(self.add_widgets_product)
+        self.ui.pushButton_logout.clicked.connect(self.logout)
+
 
     def fill_name(self):
         self.ui.label_fio.setText(self.user["full_name"])
@@ -64,3 +72,28 @@ class MainWindow(QWidget):
 
         self.selected_widget = widget
         self.selected_widget.setStyleSheet("border: 2px solid #8bbfff; border-radius: 6px")
+
+
+    def logout(self):
+        from auth import AuthWindow
+        self.auth_window = AuthWindow()
+        self.auth_window.show()
+        self.close()
+
+    def visibles(self):
+        user_role = self.user["role_id"]
+        if user_role == 2:
+            self.ui.pushButton_del.setVisible(False)
+            self.ui.pushButton_add.setVisible(False)
+            self.ui.pushButton_edit.setVisible(False)
+
+            self.ui.pushButton_delete_order.setVisible(False)
+            self.ui.pushButton_edit_order.setVisible(False)
+            self.ui.pushButton_add_order.setVisible(False)
+
+        if user_role == 3 or user_role == 4:
+            self.ui.pushButton_del.setVisible(False)
+            self.ui.pushButton_add.setVisible(False)
+            self.ui.pushButton_edit.setVisible(False)
+
+            self.ui.tabWidget.setTabVisible(1, False)

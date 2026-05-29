@@ -33,4 +33,6 @@ class AuthWindow(QWidget):
                 QMessageBox.warning(self, "Ошибка", "Пользователь с таким логинов и паролем не найден")
 
     def guest(self):
-        pass
+        self.main_window = MainWindow(user={"role_id": 4, "full_name": "Выполнен вход в качестве гостя"})
+        self.main_window.show()
+        self.close()

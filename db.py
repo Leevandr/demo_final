@@ -63,7 +63,6 @@ class Database:
         if sort == "По убыванию кол-ва на складе":
             sql += " order by quantity desc"
 
-        print(sql, params)
         with self.cursor() as cur:
             cur.execute(sql, params)
         return cur.fetchall()
