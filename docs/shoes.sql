@@ -14,13 +14,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `shoes` DEFAULT CHARACTER SET utf8 ;
+USE `shoes` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`roles`
+-- Table `shoes`.`roles`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`roles` (
+CREATE TABLE IF NOT EXISTS `shoes`.`roles` (
   `role_id` INT NOT NULL AUTO_INCREMENT,
   `role_name` VARCHAR(45) NULL,
   PRIMARY KEY (`role_id`))
@@ -28,9 +28,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`users`
+-- Table `shoes`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`users` (
+CREATE TABLE IF NOT EXISTS `shoes`.`users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `login` VARCHAR(45) NULL,
   `password` VARCHAR(45) NULL,
@@ -40,16 +40,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   INDEX `FK_roles_idx` (`role_id` ASC) VISIBLE,
   CONSTRAINT `FK_roles`
     FOREIGN KEY (`role_id`)
-    REFERENCES `mydb`.`roles` (`role_id`)
+    REFERENCES `shoes`.`roles` (`role_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`categories`
+-- Table `shoes`.`categories`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`categories` (
+CREATE TABLE IF NOT EXISTS `shoes`.`categories` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NULL,
   PRIMARY KEY (`category_id`))
@@ -57,9 +57,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`manufactures`
+-- Table `shoes`.`manufactures`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`manufactures` (
+CREATE TABLE IF NOT EXISTS `shoes`.`manufactures` (
   `manufacture_id` INT NOT NULL AUTO_INCREMENT,
   `manufacture_name` VARCHAR(45) NULL,
   PRIMARY KEY (`manufacture_id`))
@@ -67,9 +67,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`suppliers`
+-- Table `shoes`.`suppliers`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`suppliers` (
+CREATE TABLE IF NOT EXISTS `shoes`.`suppliers` (
   `supplier_id` INT NOT NULL AUTO_INCREMENT,
   `supplier_name` VARCHAR(45) NULL,
   PRIMARY KEY (`supplier_id`))
@@ -77,9 +77,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`units`
+-- Table `shoes`.`units`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`units` (
+CREATE TABLE IF NOT EXISTS `shoes`.`units` (
   `unit_id` INT NOT NULL AUTO_INCREMENT,
   `unit_name` VARCHAR(45) NULL,
   PRIMARY KEY (`unit_id`))
@@ -87,53 +87,53 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`products`
+-- Table `shoes`.`products`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`products` (
+CREATE TABLE IF NOT EXISTS `shoes`.`products` (
   `product_id` INT NOT NULL AUTO_INCREMENT,
   `article` VARCHAR(45) NULL,
   `product_name` VARCHAR(45) NULL,
   `category_id` INT NULL,
-  `description` VARCHAR(100) NULL,
-  `manufacturer_id` INT NULL,
+  `descrip` VARCHAR(100) NULL,
+  `manufacture_id` INT NULL,
   `supplier_id` INT NULL,
-  `price` INT NULL,
+  `price` DECIMAL(10,2) NULL,
   `unit_id` INT NULL,
   `quantity` INT NULL,
-  `discount` INT NULL,
-  `image_path` VARCHAR(45) NULL,
+  `discount` DECIMAL(5,2) NULL,
+  `image_path` VARCHAR(100) NULL,
   PRIMARY KEY (`product_id`),
-  INDEX `FK_manufacture_idx` (`manufacturer_id` ASC) VISIBLE,
+  INDEX `FK_manufacture_idx` (`manufacture_id` ASC) VISIBLE,
   INDEX `FK_supplier_idx` (`supplier_id` ASC) VISIBLE,
   INDEX `FK_unit_idx` (`unit_id` ASC) VISIBLE,
   INDEX `FK_category_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `FK_manufacture`
-    FOREIGN KEY (`manufacturer_id`)
-    REFERENCES `mydb`.`manufactures` (`manufacture_id`)
+    FOREIGN KEY (`manufacture_id`)
+    REFERENCES `shoes`.`manufactures` (`manufacture_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_supplier`
     FOREIGN KEY (`supplier_id`)
-    REFERENCES `mydb`.`suppliers` (`supplier_id`)
+    REFERENCES `shoes`.`suppliers` (`supplier_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_unit`
     FOREIGN KEY (`unit_id`)
-    REFERENCES `mydb`.`units` (`unit_id`)
+    REFERENCES `shoes`.`units` (`unit_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_category`
     FOREIGN KEY (`category_id`)
-    REFERENCES `mydb`.`categories` (`category_id`)
+    REFERENCES `shoes`.`categories` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`order_status`
+-- Table `shoes`.`order_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`order_status` (
+CREATE TABLE IF NOT EXISTS `shoes`.`order_status` (
   `status_id` INT NOT NULL AUTO_INCREMENT,
   `status_name` VARCHAR(45) NULL,
   PRIMARY KEY (`status_id`))
@@ -141,9 +141,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`pickup_points`
+-- Table `shoes`.`pickup_points`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`pickup_points` (
+CREATE TABLE IF NOT EXISTS `shoes`.`pickup_points` (
   `pickup_point_id` INT NOT NULL AUTO_INCREMENT,
   `address` VARCHAR(45) NULL,
   PRIMARY KEY (`pickup_point_id`))
@@ -151,39 +151,57 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`orders`
+-- Table `shoes`.`orders`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`orders` (
-  `order_id` INT NOT NULL AUTO_INCREMENT AUTO_INCREMENT,
-  `product_id` INT NULL,
+CREATE TABLE IF NOT EXISTS `shoes`.`orders` (
+  `order_id` INT NOT NULL AUTO_INCREMENT,
   `status_id` INT NULL,
   `pickup_point_id` INT NULL,
   `order_date` DATE NULL,
   `delivery_date` DATE NULL,
   `user_id` INT NULL,
   PRIMARY KEY (`order_id`),
-  INDEX `FK_product_idx` (`product_id` ASC) VISIBLE,
   INDEX `FK_status_idx` (`status_id` ASC) VISIBLE,
   INDEX `FK_pickup_point_idx` (`pickup_point_id` ASC) VISIBLE,
   INDEX `FK_user_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `FK_product`
-    FOREIGN KEY (`product_id`)
-    REFERENCES `mydb`.`products` (`product_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `FK_status`
     FOREIGN KEY (`status_id`)
-    REFERENCES `mydb`.`order_status` (`status_id`)
+    REFERENCES `shoes`.`order_status` (`status_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_pickup_point`
     FOREIGN KEY (`pickup_point_id`)
-    REFERENCES `mydb`.`pickup_points` (`pickup_point_id`)
+    REFERENCES `shoes`.`pickup_points` (`pickup_point_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_user`
     FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`users` (`user_id`)
+    REFERENCES `shoes`.`users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `shoes`.`order_items`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shoes`.`order_items` (
+  `item_id` INT NOT NULL AUTO_INCREMENT,
+  `order_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `quantity` INT NOT NULL DEFAULT 1,
+  `price` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`item_id`),
+  INDEX `FK_oi_order_idx` (`order_id` ASC) VISIBLE,
+  INDEX `FK_oi_product_idx` (`product_id` ASC) VISIBLE,
+  CONSTRAINT `FK_oi_order`
+    FOREIGN KEY (`order_id`)
+    REFERENCES `shoes`.`orders` (`order_id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_oi_product`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `shoes`.`products` (`product_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -192,3 +210,89 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+-- =====================================================
+-- ТЕСТОВЫЕ ДАННЫЕ
+-- =====================================================
+
+INSERT INTO `shoes`.`roles` (`role_name`) VALUES
+  ('Администратор'),
+  ('Менеджер'),
+  ('Клиент'),
+  ('Гость');
+
+INSERT INTO `shoes`.`users` (`login`, `password`, `role_id`, `full_name`) VALUES
+  ('admin',   'admin',   1, 'Иванов Иван Иванович'),
+  ('manager', 'manager', 2, 'Петрова Анна Сергеевна'),
+  ('client',  'client',  3, 'Сидоров Алексей Петрович');
+
+INSERT INTO `shoes`.`categories` (`category_name`) VALUES
+  ('Кроссовки'),
+  ('Туфли'),
+  ('Сапоги'),
+  ('Ботинки'),
+  ('Сандалии');
+
+INSERT INTO `shoes`.`manufactures` (`manufacture_name`) VALUES
+  ('Nike'),
+  ('Adidas'),
+  ('Puma'),
+  ('Reebok'),
+  ('Asics');
+
+INSERT INTO `shoes`.`suppliers` (`supplier_name`) VALUES
+  ('Садовод'),
+  ('POIZON'),
+  ('Ozon'),
+  ('Wildberries'),
+  ('СпортМастер');
+
+INSERT INTO `shoes`.`units` (`unit_name`) VALUES
+  ('шт'),
+  ('пара');
+
+-- products: manufacture_id, supplier_id, category_id, unit_id соответствуют порядку выше
+INSERT INTO `shoes`.`products`
+  (`article`, `product_name`, `category_id`, `descrip`, `manufacture_id`, `supplier_id`, `price`, `unit_id`, `quantity`, `discount`, `image_path`)
+VALUES
+  ('NK-001', 'Nike Air Max',     1, 'Классические кроссовки Nike', 1, 1, 8500.00,  2, 12, 10.00, NULL),
+  ('AD-002', 'Adidas Ultraboost',1, 'Беговые кроссовки Adidas',   2, 2, 9200.00,  2,  8, 5.00,  NULL),
+  ('PM-003', 'Puma RS-X',        1, 'Стильные кроссовки Puma',    3, 3, 6800.00,  2,  0, 0.00,  NULL),
+  ('RB-004', 'Reebok Classic',   1, 'Ретро-кроссовки Reebok',     4, 4, 5500.00,  2, 15, 20.00, NULL),
+  ('AS-005', 'Asics Gel-Nimbus', 1, 'Беговые кроссовки Asics',    5, 5, 11000.00, 2,  6, 0.00,  NULL),
+  ('NK-006', 'Nike Oxford',      2, 'Классические туфли Nike',    1, 1, 7200.00,  2,  4, 15.00, NULL),
+  ('AD-007', 'Adidas Derby',     2, 'Деловые туфли Adidas',       2, 3, 6500.00,  2,  9, 0.00,  NULL),
+  ('PM-008', 'Puma Suede Boot',  3, 'Замшевые сапоги Puma',       3, 2, 12000.00, 2,  0, 25.00, NULL),
+  ('RB-009', 'Reebok Hiking',    4, 'Треккинговые ботинки Reebok',4, 5, 8800.00,  2,  7, 18.00, NULL),
+  ('AS-010', 'Asics Sandal',     5, 'Летние сандалии Asics',      5, 4, 3200.00,  1, 20, 0.00,  NULL);
+
+INSERT INTO `shoes`.`order_status` (`status_name`) VALUES
+  ('Новый'),
+  ('В обработке'),
+  ('В доставке'),
+  ('Выполнен'),
+  ('Отменён');
+
+INSERT INTO `shoes`.`pickup_points` (`address`) VALUES
+  ('г. Москва, ул. Ленина, 10'),
+  ('г. Москва, пр. Мира, 45'),
+  ('г. Санкт-Петербург, ул. Невская, 3'),
+  ('г. Казань, ул. Баумана, 12');
+
+INSERT INTO `shoes`.`orders`
+  (`status_id`, `pickup_point_id`, `order_date`, `delivery_date`, `user_id`)
+VALUES
+  (1, 1, '2026-06-01', '2026-06-10', 3),
+  (2, 2, '2026-05-20', '2026-05-30', 2),
+  (4, 3, '2026-04-15', '2026-04-25', 3);
+
+INSERT INTO `shoes`.`order_items`
+  (`order_id`, `product_id`, `quantity`, `price`)
+VALUES
+  (1, 1, 2, 8500.00),
+  (1, 6, 1, 7200.00),
+  (2, 4, 3, 5500.00),
+  (2, 9, 1, 8800.00),
+  (2, 2, 2, 9200.00),
+  (3, 5, 1, 11000.00);

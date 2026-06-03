@@ -68,6 +68,11 @@
           <string>TextLabel</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="pushButton_del">
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

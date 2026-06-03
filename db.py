@@ -7,7 +7,7 @@ class Database:
     def __init__(self):
         self.conn = pymysql.connect(
             host="localhost",
-            database="mydb",
+            database="shoes",
             user="root",
             password="root",
             cursorclass=DictCursor
@@ -116,42 +116,82 @@ class Database:
     # проверяет используется ли товар в заказах перед удалением
     def product_in_orders(self, product_id):
         with self.cursor() as cur:
-            cur.execute("SELECT COUNT(*) as cnt FROM orders WHERE product_id=%s", (product_id,))
+            cur.execute("SELECT COUNT(*) as cnt FROM order_items WHERE product_id=%s", (product_id,))
             row = cur.fetchone()
         return row["cnt"] > 0
 
     def get_all_orders(self):
         with self.cursor() as cur:
             cur.execute("""
-                SELECT o.order_id, p.article, s.status_name, pp.address,
-                       o.order_date, o.delivery_date, o.product_id,
-                       o.status_id, o.pickup_point_id, o.user_id
+                SELECT o.order_id, s.status_name, pp.address,
+                       o.order_date, o.delivery_date,
+                       o.status_id, o.pickup_point_id, o.user_id,
+                       COUNT(oi.item_id) AS items_count,
+                       COALESCE(SUM(oi.quantity * oi.price), 0) AS total_amount
                 FROM orders o
-                JOIN products p ON o.product_id = p.product_id
                 JOIN order_status s ON o.status_id = s.status_id
                 JOIN pickup_points pp ON o.pickup_point_id = pp.pickup_point_id
+                LEFT JOIN order_items oi ON o.order_id = oi.order_id
+                GROUP BY o.order_id
             """)
         return cur.fetchall()
 
-    def add_order(self, product_id, status_id, pickup_point_id, order_date, delivery_date, user_id):
+    def get_order_items(self, order_id):
+        with self.cursor() as cur:
+            cur.execute("""
+                SELECT oi.item_id, oi.product_id, p.article, p.product_name,
+                       oi.quantity, oi.price
+                FROM order_items oi
+                JOIN products p ON oi.product_id = p.product_id
+                WHERE oi.order_id = %s
+            """, (order_id,))
+        return cur.fetchall()
+
+    def add_order(self, status_id, pickup_point_id, order_date, delivery_date, user_id):
         with self.cursor() as cur:
             cur.execute(
-                """INSERT INTO orders (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id)
-                   VALUES (%s,%s,%s,%s,%s,%s)""",
-                (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id)
+                """INSERT INTO orders (status_id, pickup_point_id, order_date, delivery_date, user_id)
+                   VALUES (%s,%s,%s,%s,%s)""",
+                (status_id, pickup_point_id, order_date, delivery_date, user_id)
+            )
+            order_id = cur.lastrowid
+        self.conn.commit()
+        return order_id
+
+    def update_order(self, order_id, status_id, pickup_point_id, order_date, delivery_date, user_id):
+        with self.cursor() as cur:
+            cur.execute(
+                """UPDATE orders SET status_id=%s, pickup_point_id=%s,
+                   order_date=%s, delivery_date=%s, user_id=%s WHERE order_id=%s""",
+                (status_id, pickup_point_id, order_date, delivery_date, user_id, order_id)
             )
         self.conn.commit()
 
-    def update_order(self, order_id, product_id, status_id, pickup_point_id, order_date, delivery_date, user_id):
+    def add_order_item(self, order_id, product_id, quantity, price):
         with self.cursor() as cur:
             cur.execute(
-                """UPDATE orders SET product_id=%s, status_id=%s, pickup_point_id=%s,
-                   order_date=%s, delivery_date=%s, user_id=%s WHERE order_id=%s""",
-                (product_id, status_id, pickup_point_id, order_date, delivery_date, user_id, order_id)
+                "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (%s,%s,%s,%s)",
+                (order_id, product_id, quantity, price)
             )
+        self.conn.commit()
+
+    def update_order_item_qty(self, item_id, quantity):
+        with self.cursor() as cur:
+            cur.execute("UPDATE order_items SET quantity=%s WHERE item_id=%s", (quantity, item_id))
+        self.conn.commit()
+
+    def delete_order_item(self, item_id):
+        with self.cursor() as cur:
+            cur.execute("DELETE FROM order_items WHERE item_id=%s", (item_id,))
+        self.conn.commit()
+
+    def delete_order_items(self, order_id):
+        with self.cursor() as cur:
+            cur.execute("DELETE FROM order_items WHERE order_id=%s", (order_id,))
         self.conn.commit()
 
     def delete_order(self, order_id):
+        # CASCADE в БД удалит order_items автоматически
         with self.cursor() as cur:
             cur.execute("DELETE FROM orders WHERE order_id=%s", (order_id,))
         self.conn.commit()

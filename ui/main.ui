@@ -137,20 +137,6 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_edit">
-             <property name="text">
-              <string>Редактировать</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_del">
-             <property name="text">
-              <string>Удалить</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
         </layout>
@@ -192,20 +178,6 @@
             <widget class="QPushButton" name="pushButton_add_order">
              <property name="text">
               <string>Добавить заказ</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_edit_order">
-             <property name="text">
-              <string>Редактировать заказ</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_delete_order">
-             <property name="text">
-              <string>Удалить заказ</string>
              </property>
             </widget>
            </item>

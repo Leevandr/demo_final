@@ -45,12 +45,8 @@ class MainWindow(QWidget):
         self.ui.pushButton_logout.clicked.connect(self.logout)
 
         self.ui.pushButton_add.clicked.connect(self.add_product)
-        self.ui.pushButton_edit.clicked.connect(self.edit_product)
-        self.ui.pushButton_del.clicked.connect(self.delete_product)
 
         self.ui.pushButton_add_order.clicked.connect(self.add_order)
-        self.ui.pushButton_edit_order.clicked.connect(self.edit_order)
-        self.ui.pushButton_delete_order.clicked.connect(self.delete_order)
 
     def _apply_styles(self):
         # открывать каталог первым при входе
@@ -121,7 +117,7 @@ class MainWindow(QWidget):
 
         products = dao.get_all_products(search, sort, postav)
         for product in products:
-            self.ui.verticalLayout_4.addWidget(ItemWidget(product))
+            self.ui.verticalLayout_4.addWidget(ItemWidget(product, self.user.get("role_id")))
         self.ui.verticalLayout_4.addStretch()
         self.selected_widget = None
 
@@ -135,7 +131,7 @@ class MainWindow(QWidget):
         clear_layout(self.ui.verticalLayout_9)
         orders = dao.get_all_orders()
         for order in orders:
-            self.ui.verticalLayout_9.addWidget(OrderItemWidget(order))
+            self.ui.verticalLayout_9.addWidget(OrderItemWidget(order, self.user.get("role_id")))
         self.ui.verticalLayout_9.addStretch()
         self.selected_order_widget = None
 
@@ -225,13 +221,9 @@ class MainWindow(QWidget):
         # скрываем кнопки и вкладки в зависимости от роли пользователя
         user_role = self.user.get("role_id")
         if user_role in (2, 3, 4):
-            self.ui.pushButton_del.setVisible(False)
             self.ui.pushButton_add.setVisible(False)
-            self.ui.pushButton_edit.setVisible(False)
 
         if user_role in (2, 3, 4):
-            self.ui.pushButton_delete_order.setVisible(False)
-            self.ui.pushButton_edit_order.setVisible(False)
             self.ui.pushButton_add_order.setVisible(False)
 
         if user_role in (3, 4):

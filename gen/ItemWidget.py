@@ -83,6 +83,10 @@ class Ui_ItemWidget(object):
         self.label_price.setObjectName("label_price")
         self.discount_layout.addWidget(self.label_price)
 
+        self.pushButton_del = QtWidgets.QPushButton(parent=self.frame_discount)
+        self.pushButton_del.setObjectName("pushButton_del")
+        self.discount_layout.addWidget(self.pushButton_del)
+
         self.horizontalLayout.addWidget(self.frame_discount)
 
         self.retranslateUi(ItemWidget)
@@ -101,6 +105,7 @@ class Ui_ItemWidget(object):
         self.label_quantity.setText(_translate("ItemWidget", "TextLabel"))
         self.label_discount.setText(_translate("ItemWidget", "TextLabel"))
         self.label_price.setText(_translate("ItemWidget", "TextLabel"))
+        self.pushButton_del.setText(_translate("ItemWidget", "Удалить"))
 
 
 if __name__ == "__main__":

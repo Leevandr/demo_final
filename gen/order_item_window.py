@@ -54,6 +54,9 @@ class Ui_OrderItemWidget(object):
         self.label_delivery_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_delivery_date.setObjectName("label_delivery_date")
         self.right_layout.addWidget(self.label_delivery_date)
+        self.pushButton_del = QtWidgets.QPushButton(parent=self.frame_right)
+        self.pushButton_del.setObjectName("pushButton_del")
+        self.right_layout.addWidget(self.pushButton_del)
         self.horizontalLayout_2.addWidget(self.frame_right)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout.addLayout(self.verticalLayout)
@@ -69,6 +72,7 @@ class Ui_OrderItemWidget(object):
         self.label_pick_point.setText(_translate("OrderItemWidget", "TextLabel"))
         self.label_order_date.setText(_translate("OrderItemWidget", "TextLabel"))
         self.label_delivery_date.setText(_translate("OrderItemWidget", "TextLabel"))
+        self.pushButton_del.setText(_translate("OrderItemWidget", "Удалить"))
 
 
 if __name__ == "__main__":

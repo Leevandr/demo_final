@@ -5,13 +5,15 @@ from gen.ItemWidget import Ui_ItemWidget
 
 
 class ItemWidget(QWidget):
-    def __init__(self, product):
+    def __init__(self, product, role_id=1):
         super().__init__()
         self.ui = Ui_ItemWidget()
         self.ui.setupUi(self)
         self.product = product
         self._selected = False
         self.fill_items()
+        # кнопка удаления видна только администратору
+        self.ui.pushButton_del.setVisible(role_id == 1)
 
     def fill_items(self):
         discount = self.product["discount"] or 0
@@ -34,7 +36,8 @@ class ItemWidget(QWidget):
         else:
             self.ui.label_price.setText(f"{price:.2f} руб.")
 
-        self.ui.frame_discount.setStyleSheet(self._bg())
+        self.ui.frame_info.setStyleSheet(self._bg())
+        self.ui.pushButton_del.clicked.connect(self._on_delete)
 
         pix = QPixmap("image\\" + self.product["image_path"]) if self.product["image_path"] else QPixmap("image\\default.png")
         self.ui.label_image.setPixmap(pix.scaled(150, 150))
@@ -52,19 +55,22 @@ class ItemWidget(QWidget):
         if discount > 15:
             return "background-color: #2E8B57;"
         elif self.product["quantity"] == 0:
-            return "background-color: #ADD8E6;"
+            # синий фон — текст чёрный для читаемости
+            return "background-color: #ADD8E6; color: black;"
         return ""
 
     def set_selected(self, selected: bool):
+        base = self._bg()
         if selected:
-            self.ui.frame_info.setStyleSheet("QFrame#frame_info { border: 2px solid #8bbfff; }")
-            self.ui.frame_discount.setStyleSheet(f"QFrame#frame_discount {{ border: 2px solid #8bbfff; {self._bg()} }}")
+            self.ui.frame_info.setStyleSheet(f"QFrame#frame_info {{ border: 2px solid #8bbfff; {base} }}")
+            self.ui.frame_discount.setStyleSheet("QFrame#frame_discount { border: 2px solid #8bbfff; }")
         else:
-            self.ui.frame_info.setStyleSheet("")
-            self.ui.frame_discount.setStyleSheet(self._bg())
+            self.ui.frame_info.setStyleSheet(base)
+            self.ui.frame_discount.setStyleSheet("")
 
-    def mousePressEvent(self, a0):
+    def _on_delete(self):
         self.window().select_widget(self)
+        self.window().delete_product()
 
     def mouseDoubleClickEvent(self, event):
         # двойной клик на карточке товара открывает диалог редактирования
